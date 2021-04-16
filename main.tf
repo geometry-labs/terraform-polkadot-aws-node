@@ -1,19 +1,5 @@
 resource "random_pet" "this" {}
 
-module "label" {
-  source = "github.com/robc-io/terraform-null-label.git?ref=0.16.1"
-  tags = {
-    NetworkName = var.network_name
-    Owner       = var.owner
-    Terraform   = true
-    VpcType     = "main"
-  }
-
-  environment = var.environment
-  namespace   = var.namespace
-  stage       = var.stage
-}
-
 module "user_data" {
   source         = "github.com/insight-infrastructure/terraform-polkadot-user-data.git?ref=master"
   type           = var.node_purpose
@@ -36,7 +22,7 @@ resource "aws_eip" "this" {
     prevent_destroy = false
   }
 
-  tags = module.label.tags
+  tags = var.tags
 }
 
 resource "aws_eip_association" "this" {
@@ -50,18 +36,14 @@ resource "aws_eip_association" "this" {
 resource "aws_instance" "this" {
   count = var.create ? 1 : 0
 
-  instance_type = var.instance_type
-  ami           = data.aws_ami.ubuntu.id
-
-  user_data = module.user_data.user_data
-
-  subnet_id = var.subnet_id
-
+  instance_type          = var.instance_type
+  ami                    = data.aws_ami.ubuntu.id
+  user_data              = module.user_data.user_data
+  subnet_id              = var.subnet_id
   vpc_security_group_ids = [var.security_group_id]
-
-  monitoring = var.monitoring
-
-  key_name = concat(aws_key_pair.this.*.key_name, [var.key_name])[0]
+  monitoring             = var.monitoring
+  key_name               = concat(aws_key_pair.this.*.key_name, [var.key_name])[0]
+  iam_instance_profile   = var.iam_instance_profile == "" && local.create_source_of_truth ? join("", aws_iam_instance_profile.sot_host.*.name) : var.iam_instance_profile
 
   root_block_device {
     volume_type           = "gp2"
@@ -69,7 +51,7 @@ resource "aws_instance" "this" {
     delete_on_termination = true
   }
 
-  tags = merge({ Name : var.node_name }, module.label.tags)
+  tags = merge({ Name : var.node_name }, var.tags)
 }
 
 module "ansible" {
@@ -84,7 +66,7 @@ module "ansible" {
   forks                  = 1
 
   playbook_vars = {
-    id       = module.label.id
+    id       = var.name
     ssh_user = var.ssh_user
 
     # enable flags
@@ -112,19 +94,20 @@ module "ansible" {
 
     network_settings = jsonencode(local.network_settings)
 
-    aws_access_key_id     = local.create_source_of_truth ? aws_iam_access_key.sync[0].id : var.sync_aws_access_key_id
-    aws_secret_access_key = local.create_source_of_truth ? aws_iam_access_key.sync[0].secret : var.sync_aws_secret_access_key
-    region                = var.sync_region
-    sync_bucket_uri       = local.create_source_of_truth ? aws_s3_bucket.sync[0].bucket_domain_name : var.sync_bucket_uri
+    project                   = var.project
+    instance_count            = var.instance_count
+    loggingFilter             = var.logging_filter
+    telemetryUrl              = var.telemetry_url
+    default_telemetry_enabled = var.default_telemetry_enabled
+    base_path                 = var.base_path
 
-    project                             = var.project
-    instance_count                      = var.instance_count
-    loggingFilter                       = var.logging_filter
-    telemetryUrl                        = var.telemetry_url
-    default_telemetry_enabled           = var.default_telemetry_enabled
-    base_path                           = var.base_path
+    # Validator
     polkadot_additional_common_flags    = var.polkadot_additional_common_flags
     polkadot_additional_validator_flags = var.polkadot_additional_validator_flags
+
+    # SOT
+    region          = data.aws_region.this.name
+    sync_bucket_uri = local.create_source_of_truth ? aws_s3_bucket.sync[0].bucket_domain_name : var.sync_bucket_uri
   }
 
   module_depends_on = aws_instance.this

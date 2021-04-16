@@ -22,27 +22,10 @@ output "user_data" {
   value = join("", aws_instance.this.*.user_data)
 }
 
-output "reader_aws_access_key_id" {
-  value     = join("", aws_iam_access_key.reader.*.id)
-  sensitive = true
-}
-
-output "reader_aws_secret_access_key" {
-  value     = join("", aws_iam_access_key.reader.*.secret)
-  sensitive = true
-}
-
-output "sync_aws_access_key_id" {
-  value     = join("", aws_iam_access_key.sync.*.id)
-  sensitive = true
-}
-
-output "sync_aws_secret_access_key" {
-  value     = join("", aws_iam_access_key.sync.*.secret)
-  sensitive = true
-}
-
 output "sync_bucket_uri" {
-  value     = join("", aws_s3_bucket.sync.*.bucket_domain_name)
-  sensitive = true
+  value = join("", aws_s3_bucket.sync.*.bucket_domain_name)
+}
+
+output "sync_bucket_name" {
+  value = join("", aws_s3_bucket.sync.*.bucket)
 }

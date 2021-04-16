@@ -32,7 +32,9 @@ No issue is creating limit on this module.
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
 
-No requirements.
+| Name | Version |
+|------|---------|
+| terraform | >= 0.13 |
 
 ## Providers
 
@@ -41,20 +43,45 @@ No requirements.
 | aws | n/a |
 | random | n/a |
 
+## Modules
+
+| Name | Source | Version |
+|------|--------|---------|
+| ansible | github.com/insight-infrastructure/terraform-aws-ansible-playbook.git?ref=v0.12.0 |  |
+| user_data | github.com/insight-infrastructure/terraform-polkadot-user-data.git?ref=master |  |
+
+## Resources
+
+| Name |
+|------|
+| [aws_ami](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ami) |
+| [aws_eip](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/eip) |
+| [aws_eip_association](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/eip_association) |
+| [aws_iam_instance_profile](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_instance_profile) |
+| [aws_iam_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) |
+| [aws_iam_policy_document](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) |
+| [aws_iam_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) |
+| [aws_iam_role_policy_attachment](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) |
+| [aws_instance](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance) |
+| [aws_key_pair](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/key_pair) |
+| [aws_kms_alias](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_alias) |
+| [aws_kms_key](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_key) |
+| [aws_region](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region) |
+| [aws_s3_bucket](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket) |
+| [random_pet](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/pet) |
+
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | base\_path | Alternate base path for Polkadot client | `string` | `""` | no |
-| chain | Which Polkadot chain to join | `string` | `"polkadot"` | no |
-| chain\_stub | Short-name of the Polkadot chain to join, i.e. kusama = ksmm3, polkadot = polkadot. | `string` | `"polkadot"` | no |
 | consul\_enabled | Bool to enable Consul | `bool` | `true` | no |
 | create | Boolean to make module or not | `bool` | `true` | no |
 | create\_ansible | Boolean to make module or not | `bool` | `true` | no |
 | default\_telemetry\_enabled | Bool to enable telemetry submission to telemetry.polkadot.io | `bool` | `false` | no |
-| environment | The environment | `string` | `""` | no |
 | health\_check\_enabled | Bool to enable client health check agent | `bool` | `true` | no |
 | health\_check\_port | Port number for the health check | `string` | `"5500"` | no |
+| iam\_instance\_profile | IAM instance profile name, overrides source of truth IAM. | `string` | `""` | no |
 | instance\_count | Iteration number for this instance | `string` | `"0"` | no |
 | instance\_type | Instance type | `string` | `"t2.micro"` | no |
 | key\_name | The name of the preexisting key to be used instead of the local public\_key\_path | `string` | `""` | no |
@@ -62,9 +89,8 @@ No requirements.
 | monitoring | Boolean for cloudwatch | `bool` | `false` | no |
 | mount\_volumes | Bool to enable non-root volume mounting | `bool` | `false` | no |
 | name | The name of the deployment | `string` | `"polkadot-api"` | no |
-| namespace | The namespace to deploy into | `string` | `""` | no |
-| network\_name | The network name, ie kusama / mainnet | `string` | `""` | no |
-| network\_settings | Map of network settings to apply. Use either this or set individual variables. | `map(map(string))` | `null` | no |
+| network\_name | The network name, ie kusama / polkadot | `string` | `"polkadot"` | no |
+| network\_settings | Map of network settings to apply. Use either this or set individual variables. | <pre>map(object({<br>    name                = string<br>    shortname           = string<br>    api_health          = string<br>    polkadot_prometheus = string<br>    json_rpc            = string<br>    ws_rpc              = string<br>  }))</pre> | `null` | no |
 | network\_stub | The stub name of the Polkadot chain (polkadot = polkadot, kusama = ksmcc3) | `string` | `"ksmcc3"` | no |
 | node\_exporter\_enabled | Bool to enable node exporter | `bool` | `true` | no |
 | node\_exporter\_hash | SHA256 hash of Node Exporter binary | `string` | `"b2503fd932f85f4e5baf161268854bf5d22001869b84f00fd2d1f57b51b72424"` | no |
@@ -73,7 +99,6 @@ No requirements.
 | node\_exporter\_user | User for node exporter | `string` | `"node_exporter_user"` | no |
 | node\_name | Name of the node | `string` | `""` | no |
 | node\_purpose | What type of node are you deploying? (validator/library/truth) | `string` | `"library"` | no |
-| owner | Owner of the infrastructure | `string` | `""` | no |
 | polkadot\_additional\_common\_flags | Optional common flags for Polkadot client | `string` | `""` | no |
 | polkadot\_additional\_validator\_flags | Optional validator flags for Polkadot client | `string` | `""` | no |
 | polkadot\_client\_hash | SHA256 hash of Polkadot client binary | `string` | `"cdf31d39ed54e66489d1afe74ed7549d5bcdf8ff479759e8fc476d17d069901e"` | no |
@@ -93,13 +118,10 @@ No requirements.
 | security\_group\_id | The id of the security group to run in | `string` | n/a | yes |
 | source\_of\_truth\_enabled | Bool to enable SoT sync (for use with library nodes) | `bool` | `false` | no |
 | ssh\_user | Username for SSH | `string` | `"ubuntu"` | no |
-| stage | The stage of the deployment | `string` | `""` | no |
 | storage\_driver\_type | Type of EBS storage the instance is using (nitro/standard) | `string` | `"standard"` | no |
 | subnet\_id | The id of the subnet. | `string` | `""` | no |
-| sync\_aws\_access\_key\_id | AWS access key ID for SoT sync | `string` | `""` | no |
-| sync\_aws\_secret\_access\_key | AWS access key for SoT sync | `string` | `""` | no |
 | sync\_bucket\_uri | S3 bucket URI for SoT sync | `string` | `null` | no |
-| sync\_region | AWS region for SoT sync | `string` | `""` | no |
+| tags | Tags to associate with resources. | `map(string)` | `{}` | no |
 | telemetry\_url | WSS URL for telemetry | `string` | `""` | no |
 | wss\_api\_port | Port number for the Websockets API | `string` | `"9944"` | no |
 
@@ -110,15 +132,11 @@ No requirements.
 | instance\_id | n/a |
 | private\_ip | n/a |
 | public\_ip | n/a |
-| reader\_aws\_access\_key\_id | n/a |
-| reader\_aws\_secret\_access\_key | n/a |
 | security\_group\_id | n/a |
 | subnet\_id | n/a |
-| sync\_aws\_access\_key\_id | n/a |
-| sync\_aws\_secret\_access\_key | n/a |
+| sync\_bucket\_name | n/a |
 | sync\_bucket\_uri | n/a |
 | user\_data | n/a |
-
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
 ## Authors

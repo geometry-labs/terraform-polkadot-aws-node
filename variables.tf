@@ -20,34 +20,10 @@ variable "name" {
   default     = "polkadot-api"
 }
 
-variable "environment" {
-  description = "The environment"
-  type        = string
-  default     = ""
-}
-
-variable "namespace" {
-  description = "The namespace to deploy into"
-  type        = string
-  default     = ""
-}
-
-variable "stage" {
-  description = "The stage of the deployment"
-  type        = string
-  default     = ""
-}
-
-variable "network_name" {
-  description = "The network name, ie kusama / mainnet"
-  type        = string
-  default     = ""
-}
-
-variable "owner" {
-  description = "Owner of the infrastructure"
-  type        = string
-  default     = ""
+variable "tags" {
+  description = "Tags to associate with resources."
+  type        = map(string)
+  default     = {}
 }
 
 variable "node_purpose" {
@@ -56,8 +32,8 @@ variable "node_purpose" {
   default     = "library"
 
   //  validation {
-  //    condition     = var.node_purpose == "validator" || var.node_purpose == "library" || var.node_purpose == "truth"
-  //    error_message = "The node_purpose value must be one of \"validator\", \"library\", or \"truth\"."
+  //    condition     = var.node_purpose == "validator" || var.node_purpose == "validator" || var.node_purpose == "truth"
+  //    error_message = "The node_purpose value must be one of \"validator\", \"validator\", or \"truth\"."
   //  }
 }
 
@@ -90,12 +66,6 @@ variable "monitoring" {
   default     = false
 }
 
-//variable "ebs_volume_size" {
-//  description = "EBS volume size"
-//  type        = string
-//  default     = 0
-//}
-
 variable "root_volume_size" {
   description = "Root volume size"
   type        = string
@@ -107,12 +77,6 @@ variable "instance_type" {
   type        = string
   default     = "t2.micro"
 }
-
-//variable "volume_path" {
-//  description = "Volume path"
-//  type        = string
-//  default     = "/dev/xvdf"
-//}
 
 variable "public_key" {
   description = "The public ssh key. key_name takes precidence"
@@ -205,16 +169,51 @@ variable "node_exporter_hash" {
 }
 
 # Client
+//variable "network_settings" {
+//  description = "Map of network settings to apply. Use either this or set individual variables."
+//  type        = map(map(string))
+//  default     = null
+//}
+
 variable "network_settings" {
   description = "Map of network settings to apply. Use either this or set individual variables."
-  type        = map(map(string))
-  default     = null
+  type = map(object({
+    name                = string
+    shortname           = string
+    api_health          = string
+    polkadot_prometheus = string
+    json_rpc            = string
+    ws_rpc              = string
+  }))
+  //  default     = {
+  //    polkadot = {
+  //      name                = "polkadot"
+  //      shortname           = "polkadot"
+  //      api_health          = "5000"
+  //      polkadot_prometheus = "9610"
+  //      json_rpc            = "9933"
+  //      ws_rpc              = "9944"
+  //    }
+  //  }
+  default = null
+}
+
+variable "iam_instance_profile" {
+  description = "IAM instance profile name, overrides source of truth IAM."
+  type        = string
+  default     = ""
 }
 
 variable "network_stub" {
   description = "The stub name of the Polkadot chain (polkadot = polkadot, kusama = ksmcc3)"
   type        = string
   default     = "ksmcc3"
+}
+
+variable "network_name" {
+  description = "The network name, ie kusama / polkadot"
+  type        = string
+  default     = "polkadot"
 }
 
 variable "polkadot_client_url" {
@@ -261,36 +260,6 @@ variable "polkadot_restart_month" {
 
 variable "polkadot_restart_weekday" {
   description = "Client cron restart weekday"
-  type        = string
-  default     = ""
-}
-
-variable "chain" {
-  description = "Which Polkadot chain to join"
-  type        = string
-  default     = "polkadot"
-}
-
-variable "chain_stub" {
-  description = "Short-name of the Polkadot chain to join, i.e. kusama = ksmm3, polkadot = polkadot."
-  type        = string
-  default     = "polkadot"
-}
-
-variable "sync_aws_access_key_id" {
-  description = "AWS access key ID for SoT sync"
-  type        = string
-  default     = ""
-}
-
-variable "sync_aws_secret_access_key" {
-  description = "AWS access key for SoT sync"
-  type        = string
-  default     = ""
-}
-
-variable "sync_region" {
-  description = "AWS region for SoT sync"
   type        = string
   default     = ""
 }
