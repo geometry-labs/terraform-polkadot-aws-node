@@ -23,7 +23,7 @@ module "default" {
   security_group_id = module.network.api_security_group_id
   private_key_path  = var.private_key_path
   create_ansible    = var.create_ansible
-  node_purpose      = "library"
+  node_purpose      = "validator"
 }
 
 output "public_ip" {
