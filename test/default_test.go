@@ -41,7 +41,7 @@ func TestDefault(t *testing.T) {
 	test_structure.RunTestStage(t, "validate", func() {
 		terraformOptions := test_structure.LoadTerraformOptions(t, exampleFolder)
 
-		testLbEndpoints(t, terraformOptions)
+		testEndpoints(t, terraformOptions)
 	})
 }
 
@@ -69,14 +69,13 @@ func configureTerraformOptions(t *testing.T, exampleFolder string) (*terraform.O
 			"aws_region":    awsRegion,
 			"public_key":    keyPair.PublicKey,
 			"private_key_path": privateKeyPath,
-			"create_ansible": true,
 		},
 	}
 
 	return terraformOptions, keyPair
 }
 
-func testLbEndpoints(t *testing.T, terraformOptions *terraform.Options) {
+func testEndpoints(t *testing.T, terraformOptions *terraform.Options) {
 
 	loadBalancerIp := terraform.Output(t, terraformOptions, "public_ip")
 
