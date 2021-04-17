@@ -41,7 +41,6 @@ No issue is creating limit on this module.
 | Name | Version |
 |------|---------|
 | aws | n/a |
-| random | n/a |
 
 ## Modules
 
@@ -68,16 +67,19 @@ No issue is creating limit on this module.
 | [aws_kms_key](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_key) |
 | [aws_region](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region) |
 | [aws_s3_bucket](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket) |
-| [random_pet](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/pet) |
+| [aws_security_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group) |
+| [aws_security_group_rule](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group_rule) |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| additional\_security\_group\_ports | Additional ports to add to security group. | `list(string)` | <pre>[<br>  "22"<br>]</pre> | no |
 | base\_path | Alternate base path for Polkadot client | `string` | `""` | no |
 | consul\_enabled | Bool to enable Consul | `bool` | `true` | no |
 | create | Boolean to make module or not | `bool` | `true` | no |
 | create\_ansible | Boolean to make module or not | `bool` | `true` | no |
+| create\_security\_group | Bool to create SG | `bool` | `true` | no |
 | default\_telemetry\_enabled | Bool to enable telemetry submission to telemetry.polkadot.io | `bool` | `false` | no |
 | health\_check\_enabled | Bool to enable client health check agent | `bool` | `true` | no |
 | health\_check\_port | Port number for the health check | `string` | `"5500"` | no |
@@ -97,7 +99,6 @@ No issue is creating limit on this module.
 | node\_exporter\_password | Password for node exporter | `string` | `"node_exporter_password"` | no |
 | node\_exporter\_url | URL to Node Exporter binary | `string` | `"https://github.com/prometheus/node_exporter/releases/download/v0.18.1/node_exporter-0.18.1.linux-amd64.tar.gz"` | no |
 | node\_exporter\_user | User for node exporter | `string` | `"node_exporter_user"` | no |
-| node\_name | Name of the node | `string` | `""` | no |
 | node\_purpose | What type of node are you deploying? (validator/library/truth) | `string` | `"library"` | no |
 | polkadot\_additional\_common\_flags | Optional common flags for Polkadot client | `string` | `""` | no |
 | polkadot\_additional\_validator\_flags | Optional validator flags for Polkadot client | `string` | `""` | no |
@@ -115,7 +116,8 @@ No issue is creating limit on this module.
 | public\_key | The public ssh key. key\_name takes precidence | `string` | `""` | no |
 | root\_volume\_size | Root volume size | `string` | `0` | no |
 | rpc\_api\_port | Port number for the JSON RPC API | `string` | `"9933"` | no |
-| security\_group\_id | The id of the security group to run in | `string` | n/a | yes |
+| security\_group\_cidr\_blocks | If create\_security\_group enabled, incoming cidr blocks. | `list(string)` | <pre>[<br>  "0.0.0.0/0"<br>]</pre> | no |
+| security\_group\_ids | The ids of the security group to run in | `list(string)` | `[]` | no |
 | source\_of\_truth\_enabled | Bool to enable SoT sync (for use with library nodes) | `bool` | `false` | no |
 | ssh\_user | Username for SSH | `string` | `"ubuntu"` | no |
 | storage\_driver\_type | Type of EBS storage the instance is using (nitro/standard) | `string` | `"standard"` | no |
@@ -123,6 +125,7 @@ No issue is creating limit on this module.
 | sync\_bucket\_uri | S3 bucket URI for SoT sync | `string` | `null` | no |
 | tags | Tags to associate with resources. | `map(string)` | `{}` | no |
 | telemetry\_url | WSS URL for telemetry | `string` | `""` | no |
+| vpc\_id | The VPC ID to run inside. | `string` | `""` | no |
 | wss\_api\_port | Port number for the Websockets API | `string` | `"9944"` | no |
 
 ## Outputs
@@ -136,7 +139,10 @@ No issue is creating limit on this module.
 | subnet\_id | n/a |
 | sync\_bucket\_name | n/a |
 | sync\_bucket\_uri | n/a |
+| this\_security\_group\_id | n/a |
+| this\_security\_group\_ids | n/a |
 | user\_data | n/a |
+| vpc\_id | n/a |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
 ## Authors

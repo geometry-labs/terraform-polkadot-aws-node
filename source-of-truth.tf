@@ -12,8 +12,6 @@ resource "aws_s3_bucket" "sync" {
   bucket_prefix = "${var.name}-substrate-truth"
   acl           = "private"
 
-  region = var.sync_region # TODO: RM?
-
   server_side_encryption_configuration {
     rule {
       apply_server_side_encryption_by_default {
@@ -116,4 +114,13 @@ resource "aws_iam_instance_profile" "sot_host" {
   count = local.create_source_of_truth ? 1 : 0
   name  = "test_profile"
   role  = join("", aws_iam_role.sot_host_role.*.name)
+}
+
+
+output "sync_bucket_uri" {
+  value = join("", aws_s3_bucket.sync.*.bucket_domain_name)
+}
+
+output "sync_bucket_name" {
+  value = join("", aws_s3_bucket.sync.*.bucket)
 }

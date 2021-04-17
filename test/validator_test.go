@@ -31,6 +31,6 @@ func TestValidator(t *testing.T) {
 	test_structure.RunTestStage(t, "validate", func() {
 		terraformOptions := test_structure.LoadTerraformOptions(t, exampleFolder)
 
-		testLbEndpoints(t, terraformOptions)
+		testEndpoints(t, terraformOptions)
 	})
 }

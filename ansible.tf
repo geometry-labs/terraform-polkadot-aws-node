@@ -1,116 +1,9 @@
-variable "create" {
-  description = "Boolean to make module or not"
-  type        = bool
-  default     = true
-}
 
 variable "create_ansible" {
   description = "Boolean to make module or not"
   type        = bool
   default     = true
 }
-
-########
-# Label
-########
-
-variable "name" {
-  description = "The name of the deployment"
-  type        = string
-  default     = "polkadot-api"
-}
-
-variable "tags" {
-  description = "Tags to associate with resources."
-  type        = map(string)
-  default     = {}
-}
-
-variable "node_purpose" {
-  description = "What type of node are you deploying? (validator/library/truth)"
-  type        = string
-  default     = "library"
-
-  //  validation {
-  //    condition     = var.node_purpose == "validator" || var.node_purpose == "validator" || var.node_purpose == "truth"
-  //    error_message = "The node_purpose value must be one of \"validator\", \"validator\", or \"truth\"."
-  //  }
-}
-
-#########
-# Network
-#########
-variable "subnet_id" {
-  description = "The id of the subnet."
-  type        = string
-  default     = ""
-}
-
-variable "security_group_id" {
-  description = "The id of the security group to run in"
-  type        = string
-}
-
-#####
-# ec2
-#####
-variable "node_name" {
-  description = "Name of the node"
-  type        = string
-  default     = ""
-}
-
-variable "monitoring" {
-  description = "Boolean for cloudwatch"
-  type        = bool
-  default     = false
-}
-
-variable "root_volume_size" {
-  description = "Root volume size"
-  type        = string
-  default     = 0
-}
-
-variable "instance_type" {
-  description = "Instance type"
-  type        = string
-  default     = "t2.micro"
-}
-
-variable "public_key" {
-  description = "The public ssh key. key_name takes precidence"
-  type        = string
-  default     = ""
-}
-
-variable "private_key_path" {
-  description = "Path to private key"
-  type        = string
-  default     = ""
-}
-
-variable "key_name" {
-  description = "The name of the preexisting key to be used instead of the local public_key_path"
-  type        = string
-  default     = ""
-}
-
-variable "storage_driver_type" {
-  description = "Type of EBS storage the instance is using (nitro/standard)"
-  type        = string
-  default     = "standard"
-}
-
-variable "mount_volumes" {
-  description = "Bool to enable non-root volume mounting"
-  type        = bool
-  default     = false
-}
-
-#########
-# Ansible
-#########
 
 variable "ssh_user" {
   description = "Username for SSH"
@@ -341,3 +234,63 @@ variable "polkadot_prometheus_port" {
   type        = string
   default     = "9610"
 }
+
+module "ansible" {
+  source = "github.com/insight-infrastructure/terraform-aws-ansible-playbook.git?ref=v0.12.0"
+  create = var.create_ansible && var.create
+
+  ip                     = join("", aws_eip_association.this.*.public_ip)
+  user                   = "ubuntu"
+  private_key_path       = var.private_key_path
+  playbook_file_path     = "${path.module}/ansible/${var.node_purpose}.yml"
+  requirements_file_path = "${path.module}/ansible/requirements.yml"
+  forks                  = 1
+
+  playbook_vars = {
+    id       = var.name
+    ssh_user = var.ssh_user
+
+    # enable flags
+    node_exporter_enabled = var.node_exporter_enabled
+    health_check_enabled  = var.health_check_enabled
+    consul_enabled        = var.consul_enabled
+    use_source_of_truth   = var.source_of_truth_enabled
+
+    # node exporter
+    node_exporter_user            = var.node_exporter_user
+    node_exporter_password        = var.node_exporter_password
+    node_exporter_binary_url      = var.node_exporter_url
+    node_exporter_binary_checksum = "sha256:${var.node_exporter_hash}"
+
+    # polkadot client
+    polkadot_binary_url      = var.polkadot_client_url
+    polkadot_binary_checksum = "sha256:${var.polkadot_client_hash}"
+
+    polkadot_restart_enabled = var.polkadot_restart_enabled
+    polkadot_restart_minute  = var.polkadot_restart_minute
+    polkadot_restart_hour    = var.polkadot_restart_hour
+    polkadot_restart_day     = var.polkadot_restart_day
+    polkadot_restart_month   = var.polkadot_restart_month
+    polkadot_restart_weekday = var.polkadot_restart_weekday
+
+    network_settings = jsonencode(local.network_settings)
+
+    project                   = var.project
+    instance_count            = var.instance_count
+    loggingFilter             = var.logging_filter
+    telemetryUrl              = var.telemetry_url
+    default_telemetry_enabled = var.default_telemetry_enabled
+    base_path                 = var.base_path
+
+    # Validator
+    polkadot_additional_common_flags    = var.polkadot_additional_common_flags
+    polkadot_additional_validator_flags = var.polkadot_additional_validator_flags
+
+    # SOT
+    region          = data.aws_region.this.name
+    sync_bucket_uri = local.create_source_of_truth ? aws_s3_bucket.sync[0].bucket_domain_name : var.sync_bucket_uri
+  }
+
+  module_depends_on = aws_instance.this
+}
+
