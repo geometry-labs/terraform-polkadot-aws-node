@@ -28,7 +28,7 @@ resource "aws_security_group" "this" {
   description = "Polkadot API Node Ingress."
 
   vpc_id = var.vpc_id
-  name   = "polkadot-api-sg"
+  name   = "${var.name}-sg"
   tags   = merge(var.tags, { Name = var.name })
 }
 
