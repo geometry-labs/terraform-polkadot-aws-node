@@ -306,7 +306,7 @@ module "ansible" {
     # Consul
     consul_datacenter = data.aws_region.this.name
     consul_enabled    = var.consul_enabled
-    retry_join        = "provider=aws tag_key=\"k8s.io/cluster/${var.cluster_name}\" tag_value=owned"
+    retry_join_string = "provider=aws tag_key=\"k8s.io/cluster/${var.cluster_name}\" tag_value=owned"
   }
 
   module_depends_on = aws_instance.this
