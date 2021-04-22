@@ -24,6 +24,12 @@ variable "health_check_enabled" {
   default     = true
 }
 
+variable "skip_health_check" {
+  description = "Bool to skip client health check when agent installed"
+  type        = bool
+  default     = false
+}
+
 variable "consul_enabled" {
   description = "Bool to enable Consul"
   type        = bool
@@ -112,13 +118,13 @@ variable "network_name" {
 variable "polkadot_client_url" {
   description = "URL to Polkadot client binary"
   type        = string
-  default     = "https://github.com/w3f/polkadot/releases/download/v0.8.23/polkadot"
+  default     = "https://github.com/paritytech/polkadot/releases/download/v0.8.29/polkadot"
 }
 
 variable "polkadot_client_hash" {
   description = "SHA256 hash of Polkadot client binary"
   type        = string
-  default     = "cdf31d39ed54e66489d1afe74ed7549d5bcdf8ff479759e8fc476d17d069901e"
+  default     = "0b27d0cb99ca60c08c78102a9d2f513d89dfec8dbd6fdeba8b952a420cdc9fd2"
 }
 
 variable "polkadot_restart_enabled" {
@@ -235,8 +241,14 @@ variable "polkadot_prometheus_port" {
   default     = "9610"
 }
 
+variable "cluster_name" {
+  description = "Name of the kubernetes cluster (if used)"
+  type        = string
+  default     = ""
+}
+
 module "ansible" {
-  source = "github.com/insight-infrastructure/terraform-aws-ansible-playbook.git?ref=v0.12.0"
+  source = "github.com/insight-infrastructure/terraform-aws-ansible-playbook.git?ref=v0.15.0"
   create = var.create_ansible && var.create
 
   ip                     = join("", aws_eip_association.this.*.public_ip)
@@ -253,6 +265,7 @@ module "ansible" {
     # enable flags
     node_exporter_enabled = var.node_exporter_enabled
     health_check_enabled  = var.health_check_enabled
+    skip_health_check     = var.skip_health_check
     consul_enabled        = var.consul_enabled
     use_source_of_truth   = var.source_of_truth_enabled
 
@@ -289,6 +302,11 @@ module "ansible" {
     # SOT
     region          = data.aws_region.this.name
     sync_bucket_uri = local.create_source_of_truth ? aws_s3_bucket.sync[0].bucket_domain_name : var.sync_bucket_uri
+
+    # Consul
+    consul_datacenter = data.aws_region.this.name
+    consul_enabled    = var.consul_enabled
+    retry_join_string = "provider=aws tag_key=\"k8s.io/cluster/${var.cluster_name}\" tag_value=owned"
   }
 
   module_depends_on = aws_instance.this

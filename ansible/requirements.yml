@@ -3,8 +3,9 @@
   version: 5.2.1
 - src: dev-sec.ssh-hardening
   version: 7.0.0
-- src: insight_infra.cloud_helper
-- src: insight_w3f.polkadot_base
-- src: insight_w3f.polkadot_library
-- src: insight_w3f.polkadot_truth
-- src: insight_w3f.polkadot_validator
+- src: geometrylabs.cloud_helper
+- src: geometrylabs.polkadot_base
+- src: geometrylabs.polkadot_library
+- src: geometrylabs.polkadot_truth
+- src: geometrylabs.polkadot_validator
+- src: brianshumate.consul

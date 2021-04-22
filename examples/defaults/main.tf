@@ -25,12 +25,14 @@ module "vpc" {
 }
 
 module "default" {
-  source           = "../.."
-  public_key       = var.public_key
-  subnet_id        = module.vpc.public_subnets[0]
-  vpc_id           = module.vpc.vpc_id
-  private_key_path = var.private_key_path
-  node_purpose     = "library"
+  source            = "../.."
+  public_key        = var.public_key
+  subnet_id         = module.vpc.public_subnets[0]
+  vpc_id            = module.vpc.vpc_id
+  private_key_path  = var.private_key_path
+  node_purpose      = "library"
+  skip_health_check = true
+  consul_enabled    = false
 }
 
 output "public_ip" {
