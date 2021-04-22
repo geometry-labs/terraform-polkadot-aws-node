@@ -24,6 +24,12 @@ variable "health_check_enabled" {
   default     = true
 }
 
+variable "skip_health_check" {
+  description = "Bool to skip client health check when agent installed"
+  type        = bool
+  default     = false
+}
+
 variable "consul_enabled" {
   description = "Bool to enable Consul"
   type        = bool
@@ -259,6 +265,7 @@ module "ansible" {
     # enable flags
     node_exporter_enabled = var.node_exporter_enabled
     health_check_enabled  = var.health_check_enabled
+    skip_health_check     = var.skip_health_check
     consul_enabled        = var.consul_enabled
     use_source_of_truth   = var.source_of_truth_enabled
 
