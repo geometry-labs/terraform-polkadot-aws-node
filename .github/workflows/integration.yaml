@@ -14,15 +14,15 @@ jobs:
           go-version: 1.13
 
       - name: Download Go Modules
-          working-directory: test
-          run: go mod download
+        run: go mod download
+        working-directory: test
 
       - uses: autero1/action-terraform@v0.1.0
         with:
           terraform_version: 0.12.21
       - name: Run Go Tests
-        working-directory: test
         run: make test
+        working-directory: test
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.CI_AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.CI_AWS_SECRET_ACCESS_KEY }}
@@ -31,8 +31,8 @@ jobs:
         with:
           terraform_version: 0.14.6
       - name: Run Go Tests
-        working-directory: test
         run: make test
+        working-directory: test
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.CI_AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.CI_AWS_SECRET_ACCESS_KEY }}
