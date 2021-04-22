@@ -235,6 +235,12 @@ variable "polkadot_prometheus_port" {
   default     = "9610"
 }
 
+variable "cluster_name" {
+  description = "Name of the kubernetes cluster (if used)"
+  type = string
+  default = ""
+}
+
 module "ansible" {
   source = "github.com/insight-infrastructure/terraform-aws-ansible-playbook.git?ref=v0.12.0"
   create = var.create_ansible && var.create
@@ -289,6 +295,11 @@ module "ansible" {
     # SOT
     region          = data.aws_region.this.name
     sync_bucket_uri = local.create_source_of_truth ? aws_s3_bucket.sync[0].bucket_domain_name : var.sync_bucket_uri
+
+    # Consul
+    consul_datacenter = data.aws_region.this.name
+    consul_enabled    = var.consul_enabled
+    retry_join        = "provider=aws tag_key=\"k8s.io/cluster/${var.cluster_name}\" tag_value=owned"
   }
 
   module_depends_on = aws_instance.this

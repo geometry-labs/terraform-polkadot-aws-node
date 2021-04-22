@@ -20,6 +20,21 @@
       include_role:
         name: dev-sec.ssh-hardening
       when: ansible_hardening | default(false) | bool
+    - name: Install Consul
+      include_role:
+        name: brianshumate.consul
+      vars:
+        consul_group_name: "all"
+        consul_version: 1.7.2
+        consul_encrypt_enable: false
+        consul_config_custom:
+          retry_join:
+            - "{{ retry_join_string }}"
+      when: consul_enabled|bool
+    - name: Run Consul Cleanup playbook
+      include_role:
+        name: consul-cleanup
+      when: consul_enabled|bool
     - name: Install Polkadot Base
       include_role:
         name: geometrylabs.polkadot_base
