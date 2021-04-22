@@ -243,8 +243,8 @@ variable "polkadot_prometheus_port" {
 
 variable "cluster_name" {
   description = "Name of the kubernetes cluster (if used)"
-  type = string
-  default = ""
+  type        = string
+  default     = ""
 }
 
 module "ansible" {
