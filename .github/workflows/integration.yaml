@@ -17,7 +17,7 @@ jobs:
         run: go mod download
         working-directory: test
 
-      - uses: autero1/action-terraform@v0.1.0
+      - uses: autero1/action-terraform@v1.0.0
         with:
           terraform_version: 0.12.21
       - name: Run Go Tests
@@ -27,7 +27,7 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.CI_AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.CI_AWS_SECRET_ACCESS_KEY }}
 
-      - uses: autero1/action-terraform@v0.1.0
+      - uses: autero1/action-terraform@v1.0.0
         with:
           terraform_version: 0.14.6
       - name: Run Go Tests
