@@ -118,13 +118,13 @@ variable "network_name" {
 variable "polkadot_client_url" {
   description = "URL to Polkadot client binary"
   type        = string
-  default     = "https://github.com/w3f/polkadot/releases/download/v0.8.23/polkadot"
+  default     = "https://github.com/paritytech/polkadot/releases/download/v0.8.29/polkadot"
 }
 
 variable "polkadot_client_hash" {
   description = "SHA256 hash of Polkadot client binary"
   type        = string
-  default     = "cdf31d39ed54e66489d1afe74ed7549d5bcdf8ff479759e8fc476d17d069901e"
+  default     = "0b27d0cb99ca60c08c78102a9d2f513d89dfec8dbd6fdeba8b952a420cdc9fd2"
 }
 
 variable "polkadot_restart_enabled" {
