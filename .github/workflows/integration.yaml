@@ -16,7 +16,7 @@ jobs:
       - name: Download Go Modules
         run: go mod download
         
-      - run: sudo apt install --no-install-recommends python-netaddr
+      - run: sudo apt install --no-install-recommends python-netaddr python3-netaddr
 
       - uses: autero1/action-terraform@v1.0.0
         with:
