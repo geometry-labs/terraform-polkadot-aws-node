@@ -18,8 +18,8 @@ jobs:
 
       - uses: autero1/action-terraform@v1.0.0
         with:
-          terraform_version: 0.12.21
-      - name: Run Go Tests
+          terraform_version: 0.13.5
+      - name: Run tests - TF13
         run: make test
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.CI_AWS_ACCESS_KEY_ID }}
@@ -27,7 +27,7 @@ jobs:
 
       - uses: autero1/action-terraform@v1.0.0
         with:
-          terraform_version: 0.14.6
+          terraform_version: 0.14.10
       - name: Run Go Tests
         run: make test
         env:
