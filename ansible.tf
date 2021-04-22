@@ -248,7 +248,7 @@ variable "cluster_name" {
 }
 
 module "ansible" {
-  source = "github.com/insight-infrastructure/terraform-aws-ansible-playbook.git?ref=v0.12.0"
+  source = "github.com/insight-infrastructure/terraform-aws-ansible-playbook.git?ref=v0.15.0"
   create = var.create_ansible && var.create
 
   ip                     = join("", aws_eip_association.this.*.public_ip)
