@@ -60,7 +60,6 @@ variable "public_key" {
 variable "private_key_path" {
   description = "Path to private key"
   type        = string
-  default     = ""
 }
 
 variable "key_name" {
