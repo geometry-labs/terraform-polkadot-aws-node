@@ -23,7 +23,8 @@ module "default" {
   private_key_path      = var.private_key_path
   node_purpose          = "validator"
   create_security_group = false
-  skip_health_check = true
+  skip_health_check     = true
+  consul_enabled        = false
 }
 
 output "public_ip" {
