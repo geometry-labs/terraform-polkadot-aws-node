@@ -46,7 +46,7 @@ No issue is creating limit on this module.
 
 | Name | Source | Version |
 |------|--------|---------|
-| ansible | github.com/insight-infrastructure/terraform-aws-ansible-playbook.git?ref=v0.12.0 |  |
+| ansible | github.com/insight-infrastructure/terraform-aws-ansible-playbook.git?ref=v0.15.0 |  |
 | user_data | github.com/insight-infrastructure/terraform-polkadot-user-data.git?ref=master |  |
 
 ## Resources
@@ -69,6 +69,9 @@ No issue is creating limit on this module.
 | [aws_s3_bucket](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket) |
 | [aws_security_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group) |
 | [aws_security_group_rule](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group_rule) |
+| [aws_subnet](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/subnet) |
+| [aws_subnet_ids](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/subnet_ids) |
+| [aws_vpc](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/vpc) |
 
 ## Inputs
 
@@ -76,6 +79,7 @@ No issue is creating limit on this module.
 |------|-------------|------|---------|:--------:|
 | additional\_security\_group\_ports | Additional ports to add to security group. | `list(string)` | <pre>[<br>  "22"<br>]</pre> | no |
 | base\_path | Alternate base path for Polkadot client | `string` | `""` | no |
+| cluster\_name | Name of the kubernetes cluster (if used) | `string` | `""` | no |
 | consul\_enabled | Bool to enable Consul | `bool` | `true` | no |
 | create | Boolean to make module or not | `bool` | `true` | no |
 | create\_ansible | Boolean to make module or not | `bool` | `true` | no |
@@ -102,8 +106,8 @@ No issue is creating limit on this module.
 | node\_purpose | What type of node are you deploying? (validator/library/truth) | `string` | `"library"` | no |
 | polkadot\_additional\_common\_flags | Optional common flags for Polkadot client | `string` | `""` | no |
 | polkadot\_additional\_validator\_flags | Optional validator flags for Polkadot client | `string` | `""` | no |
-| polkadot\_client\_hash | SHA256 hash of Polkadot client binary | `string` | `"cdf31d39ed54e66489d1afe74ed7549d5bcdf8ff479759e8fc476d17d069901e"` | no |
-| polkadot\_client\_url | URL to Polkadot client binary | `string` | `"https://github.com/w3f/polkadot/releases/download/v0.8.23/polkadot"` | no |
+| polkadot\_client\_hash | SHA256 hash of Polkadot client binary | `string` | `"0b27d0cb99ca60c08c78102a9d2f513d89dfec8dbd6fdeba8b952a420cdc9fd2"` | no |
+| polkadot\_client\_url | URL to Polkadot client binary | `string` | `"https://github.com/paritytech/polkadot/releases/download/v0.8.29/polkadot"` | no |
 | polkadot\_prometheus\_port | Port number for the Prometheus Metrics exporter built into the Polkadot client | `string` | `"9610"` | no |
 | polkadot\_restart\_day | Client cron restart day | `string` | `""` | no |
 | polkadot\_restart\_enabled | Bool to enable client restart cron job | `bool` | `false` | no |
@@ -111,13 +115,14 @@ No issue is creating limit on this module.
 | polkadot\_restart\_minute | Client cron restart minute | `string` | `""` | no |
 | polkadot\_restart\_month | Client cron restart month | `string` | `""` | no |
 | polkadot\_restart\_weekday | Client cron restart weekday | `string` | `""` | no |
-| private\_key\_path | Path to private key | `string` | `""` | no |
+| private\_key\_path | Path to private key | `string` | n/a | yes |
 | project | Name of the project for node name | `string` | `"project"` | no |
 | public\_key | The public ssh key. key\_name takes precidence | `string` | `""` | no |
 | root\_volume\_size | Root volume size | `string` | `0` | no |
 | rpc\_api\_port | Port number for the JSON RPC API | `string` | `"9933"` | no |
 | security\_group\_cidr\_blocks | If create\_security\_group enabled, incoming cidr blocks. | `list(string)` | <pre>[<br>  "0.0.0.0/0"<br>]</pre> | no |
 | security\_group\_ids | The ids of the security group to run in | `list(string)` | `[]` | no |
+| skip\_health\_check | Bool to skip client health check when agent installed | `bool` | `false` | no |
 | source\_of\_truth\_enabled | Bool to enable SoT sync (for use with library nodes) | `bool` | `false` | no |
 | ssh\_user | Username for SSH | `string` | `"ubuntu"` | no |
 | storage\_driver\_type | Type of EBS storage the instance is using (nitro/standard) | `string` | `"standard"` | no |

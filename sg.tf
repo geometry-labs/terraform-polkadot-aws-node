@@ -23,15 +23,25 @@ variable "vpc_id" {
   default     = ""
 }
 
+data "aws_vpc" "this" {
+  default = true
+}
+
+data "aws_subnet_ids" "this" {
+  vpc_id = data.aws_vpc.this.id
+}
+
+data "aws_subnet" "this" {
+  id = var.subnet_id == "" ? tolist(data.aws_subnet_ids.this.ids)[0] : var.subnet_id
+}
+
 resource "aws_security_group" "this" {
   count       = var.create && var.create_security_group ? 1 : 0
   description = "Polkadot API Node Ingress."
-
-  vpc_id = var.vpc_id
-  name   = "${var.name}-sg"
-  tags   = merge(var.tags, { Name = var.name })
+  name        = "${var.name}-sg"
+  vpc_id      = data.aws_subnet.this.vpc_id
+  tags        = merge(var.tags, { Name = var.name })
 }
-
 
 variable "security_group_cidr_blocks" {
   description = "If create_security_group enabled, incoming cidr blocks."

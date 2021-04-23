@@ -1,31 +1,3 @@
-variable "create" {
-  description = "Boolean to make module or not"
-  type        = bool
-  default     = true
-}
-
-variable "name" {
-  description = "The name of the deployment"
-  type        = string
-  default     = "polkadot-api"
-}
-
-variable "tags" {
-  description = "Tags to associate with resources."
-  type        = map(string)
-  default     = {}
-}
-
-variable "node_purpose" {
-  description = "What type of node are you deploying? (validator/library/truth)"
-  type        = string
-  default     = "library"
-
-  //  validation {
-  //    condition     = var.node_purpose == "validator" || var.node_purpose == "validator" || var.node_purpose == "truth"
-  //    error_message = "The node_purpose value must be one of \"validator\", \"validator\", or \"truth\"."
-  //  }
-}
 
 variable "subnet_id" {
   description = "The id of the subnet."
@@ -124,7 +96,7 @@ resource "aws_instance" "this" {
   instance_type          = var.instance_type
   ami                    = data.aws_ami.ubuntu.id
   user_data              = module.user_data.user_data
-  subnet_id              = var.subnet_id
+  subnet_id              = data.aws_subnet.this.id
   vpc_security_group_ids = concat(var.security_group_ids, aws_security_group.this.*.id)
   monitoring             = var.monitoring
   key_name               = concat(aws_key_pair.this.*.key_name, [var.key_name])[0]
@@ -140,11 +112,11 @@ resource "aws_instance" "this" {
 }
 
 output "vpc_id" {
-  value = var.vpc_id
+  value = data.aws_subnet.this.vpc_id
 }
 
 output "subnet_id" {
-  value = var.subnet_id
+  value = data.aws_subnet.this.id
 }
 
 output "security_group_id" {

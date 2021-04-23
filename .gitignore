@@ -1,5 +1,7 @@
 .idea
 
+.terraform.lock.hcl
+
 # Terraform and terragrunt
 *.tfstate*
 *.tfstate.backup
