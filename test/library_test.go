@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestSOT(t *testing.T) {
+func TestLibrary(t *testing.T) {
 	t.Parallel()
 
 	exampleFolder := test_structure.CopyTerraformFolderToTemp(t, "../", "examples/library")
