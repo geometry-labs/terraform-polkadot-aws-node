@@ -6,12 +6,6 @@ Options include validator, API, and source of truth nodes.
 ## Usage
 
 ```hcl
-module "network" {
-  source = "github.com/insight-infrastructure/terraform-aws-polkadot-network.git?ref=master"
-  sentry_enabled = true
-  num_azs = 1
-}
-
 module "default" {
   source            = "../.."
   public_key        = var.public_key
@@ -80,16 +74,16 @@ No issue is creating limit on this module.
 | additional\_security\_group\_ports | Additional ports to add to security group. | `list(string)` | <pre>[<br>  "22"<br>]</pre> | no |
 | base\_path | Alternate base path for Polkadot client | `string` | `""` | no |
 | cluster\_name | Name of the kubernetes cluster (if used) | `string` | `""` | no |
-| consul\_enabled | Bool to enable Consul | `bool` | `true` | no |
+| consul\_enabled | Bool to enable Consul | `bool` | `false` | no |
 | create | Boolean to make module or not | `bool` | `true` | no |
 | create\_ansible | Boolean to make module or not | `bool` | `true` | no |
 | create\_security\_group | Bool to create SG | `bool` | `true` | no |
 | default\_telemetry\_enabled | Bool to enable telemetry submission to telemetry.polkadot.io | `bool` | `false` | no |
-| health\_check\_enabled | Bool to enable client health check agent | `bool` | `true` | no |
+| health\_check\_enabled | Bool to enable client health check agent | `bool` | `false` | no |
 | health\_check\_port | Port number for the health check | `string` | `"5500"` | no |
 | iam\_instance\_profile | IAM instance profile name, overrides source of truth IAM. | `string` | `""` | no |
 | instance\_count | Iteration number for this instance | `string` | `"0"` | no |
-| instance\_type | Instance type | `string` | `"t2.micro"` | no |
+| instance\_type | Instance type | `string` | `"t3a.small"` | no |
 | key\_name | The name of the preexisting key to be used instead of the local public\_key\_path | `string` | `""` | no |
 | logging\_filter | String for polkadot logging filter | `string` | `"sync=trace,afg=trace,babe=debug"` | no |
 | monitoring | Boolean for cloudwatch | `bool` | `false` | no |
@@ -98,7 +92,7 @@ No issue is creating limit on this module.
 | network\_name | The network name, ie kusama / polkadot | `string` | `"polkadot"` | no |
 | network\_settings | Map of network settings to apply. Use either this or set individual variables. | <pre>map(object({<br>    name                = string<br>    shortname           = string<br>    api_health          = string<br>    polkadot_prometheus = string<br>    json_rpc            = string<br>    ws_rpc              = string<br>  }))</pre> | `null` | no |
 | network\_stub | The stub name of the Polkadot chain (polkadot = polkadot, kusama = ksmcc3) | `string` | `"ksmcc3"` | no |
-| node\_exporter\_enabled | Bool to enable node exporter | `bool` | `true` | no |
+| node\_exporter\_enabled | Bool to enable node exporter | `bool` | `false` | no |
 | node\_exporter\_hash | SHA256 hash of Node Exporter binary | `string` | `"b2503fd932f85f4e5baf161268854bf5d22001869b84f00fd2d1f57b51b72424"` | no |
 | node\_exporter\_password | Password for node exporter | `string` | `"node_exporter_password"` | no |
 | node\_exporter\_url | URL to Node Exporter binary | `string` | `"https://github.com/prometheus/node_exporter/releases/download/v0.18.1/node_exporter-0.18.1.linux-amd64.tar.gz"` | no |
@@ -122,7 +116,7 @@ No issue is creating limit on this module.
 | rpc\_api\_port | Port number for the JSON RPC API | `string` | `"9933"` | no |
 | security\_group\_cidr\_blocks | If create\_security\_group enabled, incoming cidr blocks. | `list(string)` | <pre>[<br>  "0.0.0.0/0"<br>]</pre> | no |
 | security\_group\_ids | The ids of the security group to run in | `list(string)` | `[]` | no |
-| skip\_health\_check | Bool to skip client health check when agent installed | `bool` | `false` | no |
+| skip\_health\_check | Bool to skip client health check when agent installed | `bool` | `true` | no |
 | source\_of\_truth\_enabled | Bool to enable SoT sync (for use with library nodes) | `bool` | `false` | no |
 | ssh\_user | Username for SSH | `string` | `"ubuntu"` | no |
 | storage\_driver\_type | Type of EBS storage the instance is using (nitro/standard) | `string` | `"standard"` | no |

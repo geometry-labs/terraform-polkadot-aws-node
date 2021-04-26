@@ -15,25 +15,25 @@ variable "ssh_user" {
 variable "node_exporter_enabled" {
   description = "Bool to enable node exporter"
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "health_check_enabled" {
   description = "Bool to enable client health check agent"
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "skip_health_check" {
   description = "Bool to skip client health check when agent installed"
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "consul_enabled" {
   description = "Bool to enable Consul"
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "source_of_truth_enabled" {
@@ -67,35 +67,6 @@ variable "node_exporter_hash" {
   default     = "b2503fd932f85f4e5baf161268854bf5d22001869b84f00fd2d1f57b51b72424"
 }
 
-# Client
-//variable "network_settings" {
-//  description = "Map of network settings to apply. Use either this or set individual variables."
-//  type        = map(map(string))
-//  default     = null
-//}
-
-variable "network_settings" {
-  description = "Map of network settings to apply. Use either this or set individual variables."
-  type = map(object({
-    name                = string
-    shortname           = string
-    api_health          = string
-    polkadot_prometheus = string
-    json_rpc            = string
-    ws_rpc              = string
-  }))
-  //  default     = {
-  //    polkadot = {
-  //      name                = "polkadot"
-  //      shortname           = "polkadot"
-  //      api_health          = "5000"
-  //      polkadot_prometheus = "9610"
-  //      json_rpc            = "9933"
-  //      ws_rpc              = "9944"
-  //    }
-  //  }
-  default = null
-}
 
 variable "iam_instance_profile" {
   description = "IAM instance profile name, overrides source of truth IAM."
@@ -215,30 +186,6 @@ variable "polkadot_additional_validator_flags" {
   description = "Optional validator flags for Polkadot client"
   type        = string
   default     = ""
-}
-
-variable "rpc_api_port" {
-  description = "Port number for the JSON RPC API"
-  type        = string
-  default     = "9933"
-}
-
-variable "wss_api_port" {
-  description = "Port number for the Websockets API"
-  type        = string
-  default     = "9944"
-}
-
-variable "health_check_port" {
-  description = "Port number for the health check"
-  type        = string
-  default     = "5500"
-}
-
-variable "polkadot_prometheus_port" {
-  description = "Port number for the Prometheus Metrics exporter built into the Polkadot client"
-  type        = string
-  default     = "9610"
 }
 
 variable "cluster_name" {

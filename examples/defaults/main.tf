@@ -14,12 +14,10 @@ resource "random_pet" "this" {
 }
 
 module "default" {
-  source            = "../.."
-  public_key        = var.public_key
-  private_key_path  = var.private_key_path
-  node_purpose      = "library"
-  skip_health_check = true
-  consul_enabled    = false
+  source           = "../.."
+  public_key       = var.public_key
+  private_key_path = var.private_key_path
+  node_purpose     = "library"
 }
 
 output "public_ip" {

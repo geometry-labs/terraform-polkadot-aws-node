@@ -1,7 +1,5 @@
 
-
 locals {
-  create_security_group     = var.create_security_group && var.vpc_id != "" ? true : false
   security_group_open_ports = concat(distinct(flatten([for net in local.network_settings : [net["api_health"], net["json_rpc"], net["ws_rpc"]]])), var.additional_security_group_ports)
 }
 

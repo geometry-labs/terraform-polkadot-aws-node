@@ -23,8 +23,6 @@ module "default" {
   security_group_ids = [module.network.api_security_group_id]
   private_key_path   = var.private_key_path
   node_purpose       = "truth"
-  skip_health_check  = true
-  consul_enabled     = false
 }
 
 output "public_ip" {
