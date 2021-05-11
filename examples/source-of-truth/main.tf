@@ -10,7 +10,7 @@ variable "public_key" {}
 variable "private_key_path" {}
 
 module "network" {
-  source      = "github.com/geometry-labs/terraform-aws-polkadot-network.git?ref=main"
+  source      = "github.com/geometry-labs/terraform-polkadot-aws-network?ref=main"
   api_enabled = true
   num_azs     = 1
 }
