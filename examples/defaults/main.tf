@@ -14,7 +14,9 @@ resource "random_pet" "this" {
 }
 
 module "default" {
-  source           = "../.."
+  source = "../.."
+
+  name             = "default-${random_pet.this.id}"
   public_key       = var.public_key
   private_key_path = var.private_key_path
   node_purpose     = "library"
