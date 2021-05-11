@@ -23,6 +23,8 @@ module "default" {
   security_group_ids = [module.network.api_security_group_id]
   private_key_path   = var.private_key_path
   node_purpose       = "truth"
+
+  depends_on = [module.network]
 }
 
 output "public_ip" {

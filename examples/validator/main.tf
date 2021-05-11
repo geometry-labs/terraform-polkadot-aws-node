@@ -25,6 +25,8 @@ module "default" {
   create_security_group = false
   skip_health_check     = true
   consul_enabled        = false
+
+  depends_on = [module.network]
 }
 
 output "public_ip" {
