@@ -8,4 +8,9 @@
 - src: geometrylabs.polkadot_library
 - src: geometrylabs.polkadot_truth
 - src: geometrylabs.polkadot_validator
-- src: brianshumate.consul
+- src: https://github.com/ansible-community/ansible-consul.git
+  name: ansible-consul
+  scm: git
+  version: master
+- name: envoyproxy
+  src: fabiocruzcoelho.envoyproxy
