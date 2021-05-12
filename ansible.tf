@@ -194,6 +194,48 @@ variable "cluster_name" {
   default     = ""
 }
 
+variable "consul_gossip_key" {
+  type        = string
+  description = "Consul gossip encryption key"
+  default     = ""
+}
+
+variable "consul_auto_encrypt_enabled" {
+  description = "Bool to enable Consul auto-encrypt"
+  type        = bool
+  default     = false
+}
+
+variable "consul_connect_enabled" {
+  description = "Bool to enable Consul Connect"
+  type        = bool
+  default     = false
+}
+
+variable "consul_acl_enable" {
+  description = "Bool to enable Consul ACLs"
+  type        = bool
+  default     = false
+}
+
+variable "consul_acl_datacenter" {
+  description = "Authoritative Consul ACL datacenter"
+  type        = string
+  default     = ""
+}
+
+variable "consul_acl_token" {
+  description = "Consul ACL token"
+  type        = string
+  default     = ""
+}
+
+variable "prometheus_enabled" {
+  description = "Bool to use when Prometheus is enabled"
+  type        = bool
+  default     = false
+}
+
 module "ansible" {
   source = "github.com/insight-infrastructure/terraform-aws-ansible-playbook.git?ref=v0.15.0"
   create = var.create_ansible && var.create
@@ -215,6 +257,7 @@ module "ansible" {
     skip_health_check     = var.skip_health_check
     consul_enabled        = var.consul_enabled
     use_source_of_truth   = var.source_of_truth_enabled
+    prometheus_enabled    = var.prometheus_enabled
 
     # node exporter
     node_exporter_user            = var.node_exporter_user
@@ -251,9 +294,15 @@ module "ansible" {
     sync_bucket_uri = local.create_source_of_truth ? aws_s3_bucket.sync[0].bucket_domain_name : var.sync_bucket_uri
 
     # Consul
-    consul_datacenter = data.aws_region.this.name
-    consul_enabled    = var.consul_enabled
-    retry_join_string = "provider=aws tag_key=\"k8s.io/cluster/${var.cluster_name}\" tag_value=owned"
+    consul_datacenter           = data.aws_region.this.name
+    consul_enabled              = var.consul_enabled
+    retry_join_string           = "provider=aws tag_key=\"k8s.io/cluster/${var.cluster_name}\" tag_value=owned"
+    consul_gossip_key           = var.consul_gossip_key
+    consul_auto_encrypt_enabled = var.consul_auto_encrypt_enabled
+    consul_connect_enabled      = var.consul_connect_enabled
+    consul_acl_enable           = var.consul_acl_enable
+    consul_acl_datacenter       = var.consul_acl_datacenter
+    consul_acl_token            = var.consul_acl_token
   }
 
   module_depends_on = aws_instance.this

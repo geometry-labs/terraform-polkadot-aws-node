@@ -1,5 +1,6 @@
 
 locals {
+  consul_open_ports         = [8300, 8301, 8302, 8400, 8500, 8501, 8502, 8600]
   security_group_open_ports = concat(distinct(flatten([for net in local.network_settings : [net["api_health"], net["json_rpc"], net["ws_rpc"]]])), var.additional_security_group_ports)
 }
 
@@ -13,6 +14,12 @@ variable "create_security_group" {
   description = "Bool to create SG"
   type        = bool
   default     = true
+}
+
+variable "consul_security_group" {
+  description = "ID of security group to containing Consul"
+  type        = string
+  default     = null
 }
 
 variable "vpc_id" {
@@ -55,6 +62,16 @@ resource "aws_security_group_rule" "ingress" {
   security_group_id = join("", aws_security_group.this.*.id)
   cidr_blocks       = var.security_group_cidr_blocks
   type              = "ingress"
+}
+
+resource "aws_security_group_rule" "consul_ingress" {
+  count                    = var.create && var.create_security_group && var.consul_enabled ? length(local.consul_open_ports) : 0
+  from_port                = local.consul_open_ports[count.index]
+  to_port                  = local.consul_open_ports[count.index]
+  protocol                 = "tcp"
+  security_group_id        = join("", aws_security_group.this.*.id)
+  source_security_group_id = var.consul_security_group
+  type                     = "ingress"
 }
 
 resource "aws_security_group_rule" "egress" {
