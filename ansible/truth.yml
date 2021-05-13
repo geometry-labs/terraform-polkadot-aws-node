@@ -43,10 +43,6 @@
       include_role:
         name: envoyproxy
       when: consul_connect_enabled | bool
-    - name: Run Consul Cleanup playbook
-      include_role:
-        name: consul-cleanup
-      when: consul_enabled|bool
     - name: Install Polkadot Base
       include_role:
         name: geometrylabs.polkadot_base
