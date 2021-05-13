@@ -14,9 +14,6 @@ jobs:
           - TestValidator
           - TestDefault
           - TestDefaultParachains
-          - TestAnsibleLibrary
-          - TestAnsibleValidator
-          - TestAnsibleSOT
 
     name: Run Terratest Integration Tests
     runs-on: ubuntu-latest

@@ -197,7 +197,7 @@ variable "cluster_name" {
 variable "consul_version" {
   type        = string
   description = "Consul version number to install"
-  default     = null
+  default     = "1.9.4"
 }
 
 variable "consul_gossip_key" {
@@ -236,11 +236,25 @@ variable "consul_acl_token" {
   default     = ""
 }
 
+variable "consul_tls_source_dir" {
+  description = "Path to directory containing Consul TLS certs"
+  type        = string
+  default     = null
+}
+
+variable "consul_tls_ca_filename" {
+  description = "Filename for Consul TLS CA certificate"
+  type        = string
+  default     = "ca.crt"
+}
+
 variable "prometheus_enabled" {
   description = "Bool to use when Prometheus is enabled"
   type        = bool
   default     = false
 }
+
+
 
 module "ansible" {
   source = "github.com/insight-infrastructure/terraform-aws-ansible-playbook.git?ref=v0.15.0"
@@ -306,6 +320,8 @@ module "ansible" {
     retry_join_string           = "provider=aws tag_key=\"k8s.io/cluster/${var.cluster_name}\" tag_value=owned"
     consul_gossip_key           = var.consul_gossip_key
     consul_auto_encrypt_enabled = var.consul_auto_encrypt_enabled
+    consul_tls_src_files        = var.consul_tls_source_dir
+    consul_tls_ca_crt           = var.consul_tls_ca_filename
     consul_connect_enabled      = var.consul_connect_enabled
     consul_acl_enable           = var.consul_acl_enable
     consul_acl_datacenter       = var.consul_acl_datacenter

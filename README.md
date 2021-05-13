@@ -153,7 +153,9 @@ No issue is creating limit on this module.
 | <a name="input_consul_enabled"></a> [consul\_enabled](#input\_consul\_enabled) | Bool to enable Consul | `bool` | `false` | no |
 | <a name="input_consul_gossip_key"></a> [consul\_gossip\_key](#input\_consul\_gossip\_key) | Consul gossip encryption key | `string` | `""` | no |
 | <a name="input_consul_security_group"></a> [consul\_security\_group](#input\_consul\_security\_group) | ID of security group to containing Consul | `string` | `null` | no |
-| <a name="input_consul_version"></a> [consul\_version](#input\_consul\_version) | Consul version number to install | `string` | `null` | no |
+| <a name="input_consul_tls_ca_filename"></a> [consul\_tls\_ca\_filename](#input\_consul\_tls\_ca\_filename) | Filename for Consul TLS CA certificate | `string` | `"ca.crt"` | no |
+| <a name="input_consul_tls_source_dir"></a> [consul\_tls\_source\_dir](#input\_consul\_tls\_source\_dir) | Path to directory containing Consul TLS certs | `string` | `null` | no |
+| <a name="input_consul_version"></a> [consul\_version](#input\_consul\_version) | Consul version number to install | `string` | `"1.9.4"` | no |
 | <a name="input_create"></a> [create](#input\_create) | Boolean to make module or not | `bool` | `true` | no |
 | <a name="input_create_ansible"></a> [create\_ansible](#input\_create\_ansible) | Boolean to make module or not | `bool` | `true` | no |
 | <a name="input_create_security_group"></a> [create\_security\_group](#input\_create\_security\_group) | Bool to create SG | `bool` | `true` | no |

@@ -29,6 +29,8 @@
         consul_raw_key: "{{ consul_gossip_key }}"
         auto_encrypt:
           enabled: consul_auto_encrypt_enabled | bool
+        consul_tls_src_files: "{{ consul_tls_src_files }}"
+        consul_tls_ca_crt: "{{ consul_tls_ca_crt }}"
         consul_connect_enabled: consul_connect_enabled | bool
         consul_datacenter: "{{ consul_datacenter }}"
         consul_ports_https: 8501
