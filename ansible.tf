@@ -254,7 +254,11 @@ variable "prometheus_enabled" {
   default     = false
 }
 
-
+variable "hardening_enabled" {
+  description = "Runs a series of linux hardening playbooks - ansible-collection-hardening"
+  type        = bool
+  default     = false
+}
 
 module "ansible" {
   source = "github.com/insight-infrastructure/terraform-aws-ansible-playbook.git?ref=v0.15.0"
@@ -278,6 +282,7 @@ module "ansible" {
     consul_enabled        = var.consul_enabled
     use_source_of_truth   = var.source_of_truth_enabled
     prometheus_enabled    = var.prometheus_enabled
+    hardening_enabled     = var.hardening_enabled
 
     # node exporter
     node_exporter_user            = var.node_exporter_user

@@ -154,6 +154,7 @@ No issue is creating limit on this module.
 | create\_ansible | Boolean to make module or not | `bool` | `true` | no |
 | create\_security\_group | Bool to create SG | `bool` | `true` | no |
 | default\_telemetry\_enabled | Bool to enable telemetry submission to telemetry.polkadot.io | `bool` | `false` | no |
+| hardening\_enabled | Runs a series of linux hardening playbooks - ansible-collection-hardening | `bool` | `false` | no |
 | health\_check\_enabled | Bool to enable client health check agent | `bool` | `false` | no |
 | health\_check\_port | Port number for the health check | `string` | `"5500"` | no |
 | iam\_instance\_profile | IAM instance profile name, overrides source of truth IAM. | `string` | `""` | no |

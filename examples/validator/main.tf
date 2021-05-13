@@ -31,6 +31,7 @@ module "default" {
   create_security_group = false
   skip_health_check     = true
   consul_enabled        = false
+  hardening_enabled     = true
 
   depends_on = [module.network]
 }
