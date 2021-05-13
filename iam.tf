@@ -13,7 +13,7 @@ data "aws_iam_policy_document" "assume_policy_document" {
 resource "aws_iam_role" "sot_host_role" {
   count              = local.create_source_of_truth ? 1 : 0
   path               = "/"
-  assume_role_policy = join("", data.aws_iam_policy_document.assume_policy_document.*.json)
+  assume_role_policy = data.aws_iam_policy_document.assume_policy_document.json
 }
 
 data "aws_iam_policy_document" "sot_host_policy_document" {
