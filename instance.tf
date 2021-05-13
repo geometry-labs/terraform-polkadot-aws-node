@@ -90,6 +90,10 @@ resource "aws_eip_association" "this" {
   instance_id   = join("", aws_instance.this.*.id)
 }
 
+locals {
+  instance_profile = var.iam_instance_profile == "" ? join("", aws_iam_instance_profile.this.*.name) : var.iam_instance_profile
+}
+
 resource "aws_instance" "this" {
   count = var.create ? 1 : 0
 
@@ -100,7 +104,7 @@ resource "aws_instance" "this" {
   vpc_security_group_ids = concat(var.security_group_ids, aws_security_group.this.*.id)
   monitoring             = var.monitoring
   key_name               = concat(aws_key_pair.this.*.key_name, [var.key_name])[0]
-  iam_instance_profile   = var.iam_instance_profile == "" && local.create_source_of_truth ? join("", aws_iam_instance_profile.sot_host.*.name) : var.iam_instance_profile
+  iam_instance_profile   = local.instance_profile
 
   root_block_device {
     volume_type           = "gp2"
