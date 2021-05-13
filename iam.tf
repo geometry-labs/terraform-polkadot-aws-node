@@ -68,7 +68,7 @@ data "aws_iam_policy_document" "consul" {
       "ec2:DescribeInstances",
       "ec2:DescribeTags"
     ]
-    resource = "*"
+    resources = ["*"]
   }
 }
 
