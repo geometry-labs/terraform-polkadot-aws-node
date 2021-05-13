@@ -9,7 +9,7 @@ locals {
 
 resource "aws_s3_bucket" "sync" {
   count         = local.create_source_of_truth ? 1 : 0
-  bucket_prefix = "${var.name}-substrate-truth"
+  bucket_prefix = "${var.name}-truth"
   acl           = "private"
 
   server_side_encryption_configuration {

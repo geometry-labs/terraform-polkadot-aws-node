@@ -1,11 +1,11 @@
 resource "aws_iam_instance_profile" "this" {
   count       = var.consul_enabled || local.create_source_of_truth ? 1 : 0
   name_prefix = "${var.name}-"
-  role        = join("", aws_iam_role.sot_host_role.*.name)
+  role        = join("", aws_iam_role.this.*.name)
 }
 
-resource "aws_iam_role" "sot_host_role" {
-  count              = local.create_source_of_truth ? 1 : 0
+resource "aws_iam_role" "this" {
+  count              = var.consul_enabled || local.create_source_of_truth ? 1 : 0
   path               = "/"
   assume_role_policy = data.aws_iam_policy_document.assume_policy_document.json
 }
@@ -58,7 +58,7 @@ resource "aws_iam_policy" "sot_host_policy" {
 resource "aws_iam_role_policy_attachment" "sot_host" {
   count      = local.create_source_of_truth ? 1 : 0
   policy_arn = join("", aws_iam_policy.sot_host_policy.*.arn)
-  role       = join("", aws_iam_role.sot_host_role.*.name)
+  role       = join("", aws_iam_role.this.*.name)
 }
 
 data "aws_iam_policy_document" "consul" {
@@ -80,5 +80,5 @@ resource "aws_iam_policy" "consul" {
 resource "aws_iam_role_policy_attachment" "consul" {
   count      = var.consul_enabled ? 1 : 0
   policy_arn = join("", aws_iam_policy.consul.*.arn)
-  role       = join("", aws_iam_role.sot_host_role.*.name)
+  role       = join("", aws_iam_role.this.*.name)
 }
