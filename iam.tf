@@ -74,12 +74,11 @@ data "aws_iam_policy_document" "consul" {
 
 resource "aws_iam_policy" "consul" {
   count  = var.consul_enabled ? 1 : 0
-  policy = join("", data.aws_iam_policy_document.sot_host_policy_document.*.json)
+  policy = join("", data.aws_iam_policy_document.consul.*.json)
 }
 
 resource "aws_iam_role_policy_attachment" "consul" {
   count      = var.consul_enabled ? 1 : 0
-  policy_arn = join("", aws_iam_policy.sot_host_policy.*.arn)
+  policy_arn = join("", aws_iam_policy.consul.*.arn)
   role       = join("", aws_iam_role.sot_host_role.*.name)
 }
-
