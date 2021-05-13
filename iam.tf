@@ -64,6 +64,7 @@ resource "aws_iam_role_policy_attachment" "sot_host" {
 data "aws_iam_policy_document" "consul" {
   count = var.consul_enabled ? 1 : 0
   statement {
+    sid = "DescribeInstancesPolicy"
     actions = [
       "ec2:DescribeInstances",
       "ec2:DescribeTags"
