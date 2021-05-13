@@ -1,3 +1,15 @@
+resource "aws_iam_instance_profile" "this" {
+  count       = var.consul_enabled || local.create_source_of_truth ? 1 : 0
+  name_prefix = "${var.name}-"
+  role        = join("", aws_iam_role.sot_host_role.*.name)
+}
+
+resource "aws_iam_role" "sot_host_role" {
+  count              = local.create_source_of_truth ? 1 : 0
+  path               = "/"
+  assume_role_policy = data.aws_iam_policy_document.assume_policy_document.json
+}
+
 data "aws_iam_policy_document" "assume_policy_document" {
   statement {
     actions = [
@@ -8,12 +20,6 @@ data "aws_iam_policy_document" "assume_policy_document" {
       identifiers = ["ec2.amazonaws.com"]
     }
   }
-}
-
-resource "aws_iam_role" "sot_host_role" {
-  count              = local.create_source_of_truth ? 1 : 0
-  path               = "/"
-  assume_role_policy = data.aws_iam_policy_document.assume_policy_document.json
 }
 
 data "aws_iam_policy_document" "sot_host_policy_document" {
@@ -55,12 +61,6 @@ resource "aws_iam_role_policy_attachment" "sot_host" {
   role       = join("", aws_iam_role.sot_host_role.*.name)
 }
 
-resource "aws_iam_role" "sot_host_role" {
-  count              = local.create_source_of_truth ? 1 : 0
-  path               = "/"
-  assume_role_policy = join("", data.aws_iam_policy_document.assume_policy_document.*.json)
-}
-
 data "aws_iam_policy_document" "consul" {
   count = var.consul_enabled ? 1 : 0
   statement {
@@ -83,8 +83,3 @@ resource "aws_iam_role_policy_attachment" "consul" {
   role       = join("", aws_iam_role.sot_host_role.*.name)
 }
 
-resource "aws_iam_instance_profile" "this" {
-  count       = var.consul_enabled || local.create_source_of_truth ? 1 : 0
-  name_prefix = "${var.name}-"
-  role        = join("", aws_iam_role.sot_host_role.*.name)
-}
