@@ -24,6 +24,7 @@
       include_role:
         name: ansible-consul
       vars:
+        consul_version: "{{ consul_version }}"
         consul_group_name: "all"
         consul_raw_key: "{{ consul_gossip_key }}"
         auto_encrypt:

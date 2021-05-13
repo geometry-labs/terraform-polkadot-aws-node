@@ -194,6 +194,12 @@ variable "cluster_name" {
   default     = ""
 }
 
+variable "consul_version" {
+  type        = string
+  description = "Consul version number to install"
+  default     = null
+}
+
 variable "consul_gossip_key" {
   type        = string
   description = "Consul gossip encryption key"
@@ -296,6 +302,7 @@ module "ansible" {
     # Consul
     consul_datacenter           = data.aws_region.this.name
     consul_enabled              = var.consul_enabled
+    consul_version              = var.consul_version
     retry_join_string           = "provider=aws tag_key=\"k8s.io/cluster/${var.cluster_name}\" tag_value=owned"
     consul_gossip_key           = var.consul_gossip_key
     consul_auto_encrypt_enabled = var.consul_auto_encrypt_enabled
