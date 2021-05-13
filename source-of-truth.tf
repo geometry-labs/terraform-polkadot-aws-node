@@ -4,7 +4,7 @@
 //gives the node permission to push data to it.
 
 locals {
-  create_source_of_truth = var.node_purpose == "truth" && var.sync_bucket_uri != null
+  create_source_of_truth = var.node_purpose == "truth" && var.sync_bucket_uri == null
 }
 
 resource "aws_s3_bucket" "sync" {
