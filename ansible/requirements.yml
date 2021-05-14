@@ -15,7 +15,7 @@ roles:
   - src: geometrylabs.polkadot_validator
 
   - name: ansible-consul
-    src: https://github.com/ansible-community/ansible-consul.git
+    src: https://github.com/geometry-labs/ansible-consul.git
     scm: git
     version: master
 
