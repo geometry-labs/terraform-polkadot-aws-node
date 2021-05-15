@@ -30,17 +30,39 @@ jobs:
       - uses: autero1/action-terraform@v1.0.0
         with:
           terraform_version: 0.14.11
+
       - name: Run tests - TF14
-        run: go test ./test -v --run ${{ matrix.tf_tests }} -timeout 45m
+        uses: nick-invision/retry@v2
+        with:
+          timeout_minutes: 75
+          max_attempts: 2
+          command: go test ./test -v --run ${{ matrix.tf_tests }} -timeout 45m
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.CI_AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.CI_AWS_SECRET_ACCESS_KEY }}
 
+#      - name: Run tests - TF14
+#        run: go test ./test -v --run ${{ matrix.tf_tests }} -timeout 45m
+#        env:
+#          AWS_ACCESS_KEY_ID: ${{ secrets.CI_AWS_ACCESS_KEY_ID }}
+#          AWS_SECRET_ACCESS_KEY: ${{ secrets.CI_AWS_SECRET_ACCESS_KEY }}
+
       - uses: autero1/action-terraform@v1.0.0
         with:
           terraform_version: 0.15.3
+
       - name: Run tests - TF15
-        run: go test ./test -v --run ${{ matrix.tf_tests }} -timeout 45m
+        uses: nick-invision/retry@v2
+        with:
+          timeout_minutes: 75
+          max_attempts: 2
+          command: go test ./test -v --run ${{ matrix.tf_tests }} -timeout 45m
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.CI_AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.CI_AWS_SECRET_ACCESS_KEY }}
+
+#      - name: Run tests - TF15
+#        run: go test ./test -v --run ${{ matrix.tf_tests }} -timeout 45m
+#        env:
+#          AWS_ACCESS_KEY_ID: ${{ secrets.CI_AWS_ACCESS_KEY_ID }}
+#          AWS_SECRET_ACCESS_KEY: ${{ secrets.CI_AWS_SECRET_ACCESS_KEY }}

@@ -1,6 +1,9 @@
 # terraform-polkadot-aws-node
 
-This module sets up a single node for the Polkadot blockchain and it's associated parachains on AWS. It can be used in a variety of different configurations depending on its `node_purpose` which can be one of,
+![](https://github.com/geometry-labs/terraform-polkadot-aws-node/actions/workflows/integration.yaml/badge.svg)
+
+
+This module sets up a single node for the Polkadot blockchain and it's associated parachains on AWS. It uses Ansible to configure the node depending on its `node_purpose` which can be one of,
 
 - `validator` - Requires manual unsealing 
 - `library` - Archive node running on a configurable set of parachains 
@@ -14,7 +17,19 @@ The module is intended to be flexible in its configuration parameters allowing u
 - Ansible 2.9 - `pip install ansible`
 - SSH Keys - `ssh-keygen -b 4096` (Only public required)
 
+## Ansible Modules 
+
+| Name | Version | 
+| :--- | :--- | 
+| [polkadot_base]() | ![](https://img.shields.io/github/v/release/geometry-labs/ansible-role-polkadot-base) | 
+| [polkadot_library](https://github.com/geometry-labs/ansible-role-polkadot-library) | ![](https://img.shields.io/github/v/release/geometry-labs/ansible-role-polkadot-library) | 
+| [polkadot_truth](https://github.com/geometry-labs/ansible-role-polkadot-truth) | ![](https://img.shields.io/github/v/release/geometry-labs/ansible-role-polkadot-truth) | 
+| [polkadot_validator](https://github.com/geometry-labs/ansible-role-polkadot-validator) | ![](https://img.shields.io/github/v/release/geometry-labs/ansible-role-polkadot-validator) |
+| [cloud_helper](https://github.com/geometry-labs/ansible-role-cloud-helper) |  ![](https://img.shields.io/github/v/release/geometry-labs/ansible-role-cloud-helper) | 
+
 ## Usage
+
+
 
 Steps for running terraform:
 
@@ -38,7 +53,7 @@ cat $HOME/.ssh/<your key name>.pub # this is the `public_key` variable
 
 Minimal defaults example for polkadot.  To run other parachains reference the other example. 
 
-```hcl-terraform
+```hcl
 module "default" {
   source           = "github.com/geometry-labs/terraform-polkadot-aws-node"
   name             = "default-${random_pet.this.id}"
@@ -53,7 +68,7 @@ Deploys in default vpc and creates security group.  For public deployments
 
 To run additional parachains, complete the below map for `network_settings` to map ports to the associated chain. Ports will then be exposed over the load balancer. 
 
-```hcl-terraform
+```hcl
 locals {
   network_settings = {
     polkadot = {
