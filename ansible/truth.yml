@@ -47,6 +47,10 @@
       include_role:
         name: envoyproxy
       when: consul_connect_enabled | bool
+    - name: Configure Envoy proxy
+      include_role:
+        name: geometrylabs.substrate_connect_envoy_config
+      when: consul_connect_enabled | bool
     - name: Install Polkadot Base
       include_role:
         name: geometrylabs.polkadot_base
