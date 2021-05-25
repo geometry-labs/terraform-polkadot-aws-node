@@ -61,6 +61,7 @@
         api_rpc_port: "{{ item.value['json_rpc'] }}"
         api_wss_port: "{{ item.value['ws_rpc'] }}"
         health_check_port: "{{ item.value['api_health'] }}"
+        chain_stub: "{{ item.value['shortname'] }}"
         chain: "{{ item.value['name'] }}"
       loop: "{{ network_settings | from_json | dict2items }}"
     - name: Install Polkadot Library
