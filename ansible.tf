@@ -272,8 +272,10 @@ module "ansible" {
   forks                  = 1
 
   playbook_vars = {
-    id       = var.name
-    ssh_user = var.ssh_user
+    id                = var.name
+    ssh_user          = var.ssh_user
+    deployed_networks = [for network in local.network_settings : network["shortname"]]
+    instance_type     = "node"
 
     # enable flags
     node_exporter_enabled = var.node_exporter_enabled
