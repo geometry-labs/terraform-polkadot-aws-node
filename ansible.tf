@@ -274,7 +274,7 @@ module "ansible" {
   playbook_vars = {
     id                = var.name
     ssh_user          = var.ssh_user
-    deployed_networks = [for network in local.network_settings : network["shortname"]]
+    deployed_networks = join("\n", [for network in local.network_settings : network["shortname"]])
     instance_type     = "node"
 
     # enable flags
