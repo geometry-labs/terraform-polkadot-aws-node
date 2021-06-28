@@ -44,7 +44,8 @@ data "aws_iam_policy_document" "sot_host_policy_document" {
   statement {
     actions = [
       "kms:Encrypt",
-      "kms:Decrypt"
+      "kms:Decrypt",
+      "kms:GenerateDataKey"
     ]
     resources = [join("", aws_kms_key.key.*.arn)]
   }

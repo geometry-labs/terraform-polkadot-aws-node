@@ -118,14 +118,14 @@ No issue is creating limit on this module.
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | n/a |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 3.37.0 |
 
 ## Modules
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_ansible"></a> [ansible](#module\_ansible) | github.com/insight-infrastructure/terraform-aws-ansible-playbook.git?ref=v0.15.0 |  |
-| <a name="module_user_data"></a> [user\_data](#module\_user\_data) | github.com/insight-infrastructure/terraform-polkadot-user-data.git?ref=master |  |
+| <a name="module_ansible"></a> [ansible](#module\_ansible) | github.com/insight-infrastructure/terraform-aws-ansible-playbook.git | v0.15.0 |
+| <a name="module_user_data"></a> [user\_data](#module\_user\_data) | github.com/insight-infrastructure/terraform-polkadot-user-data.git | master |
 
 ## Resources
 
