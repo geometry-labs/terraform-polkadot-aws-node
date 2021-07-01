@@ -4,7 +4,7 @@
 //gives the node permission to push data to it.
 
 locals {
-  create_source_of_truth = var.node_purpose == "truth" && var.sync_bucket_uri == null
+  create_source_of_truth = var.node_purpose == "truth" && var.sync_bucket_name == null
 }
 
 resource "aws_s3_bucket" "sync" {
@@ -35,7 +35,7 @@ resource "aws_kms_alias" "alias" {
   target_key_id = join("", aws_kms_key.key.*.arn)
 }
 
-output "sync_bucket_uri" {
+output "sync_bucket_domain_name" {
   value = join("", aws_s3_bucket.sync.*.bucket_domain_name)
 }
 

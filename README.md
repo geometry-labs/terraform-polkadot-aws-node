@@ -224,7 +224,7 @@ No issue is creating limit on this module.
 | <a name="input_ssh_user"></a> [ssh\_user](#input\_ssh\_user) | Username for SSH | `string` | `"ubuntu"` | no |
 | <a name="input_storage_driver_type"></a> [storage\_driver\_type](#input\_storage\_driver\_type) | Type of EBS storage the instance is using (nitro/standard) | `string` | `"standard"` | no |
 | <a name="input_subnet_id"></a> [subnet\_id](#input\_subnet\_id) | The id of the subnet. | `string` | `""` | no |
-| <a name="input_sync_bucket_uri"></a> [sync\_bucket\_uri](#input\_sync\_bucket\_uri) | S3 bucket URI for SoT sync | `string` | `null` | no |
+| <a name="input_sync_bucket_name"></a> [sync\_bucket\_name](#input\_sync\_bucket\_name) | S3 bucket name for SoT sync | `string` | `null` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | Tags to associate with resources. | `map(string)` | `{}` | no |
 | <a name="input_telemetry_url"></a> [telemetry\_url](#input\_telemetry\_url) | WSS URL for telemetry | `string` | `""` | no |
 | <a name="input_vpc_id"></a> [vpc\_id](#input\_vpc\_id) | The VPC ID to run inside. | `string` | `""` | no |
@@ -240,8 +240,8 @@ No issue is creating limit on this module.
 | <a name="output_public_ip"></a> [public\_ip](#output\_public\_ip) | n/a |
 | <a name="output_security_group_id"></a> [security\_group\_id](#output\_security\_group\_id) | n/a |
 | <a name="output_subnet_id"></a> [subnet\_id](#output\_subnet\_id) | n/a |
+| <a name="output_sync_bucket_domain_name"></a> [sync\_bucket\_domain\_name](#output\_sync\_bucket\_domain\_name) | n/a |
 | <a name="output_sync_bucket_name"></a> [sync\_bucket\_name](#output\_sync\_bucket\_name) | n/a |
-| <a name="output_sync_bucket_uri"></a> [sync\_bucket\_uri](#output\_sync\_bucket\_uri) | n/a |
 | <a name="output_this_security_group_id"></a> [this\_security\_group\_id](#output\_this\_security\_group\_id) | n/a |
 | <a name="output_this_security_group_ids"></a> [this\_security\_group\_ids](#output\_this\_security\_group\_ids) | n/a |
 | <a name="output_user_data"></a> [user\_data](#output\_user\_data) | n/a |

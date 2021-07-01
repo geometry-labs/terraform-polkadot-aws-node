@@ -134,8 +134,8 @@ variable "polkadot_restart_weekday" {
   default     = ""
 }
 
-variable "sync_bucket_uri" {
-  description = "S3 bucket URI for SoT sync"
+variable "sync_bucket_name" {
+  description = "S3 bucket name for SoT sync"
   type        = string
   default     = null
 }
@@ -317,8 +317,8 @@ module "ansible" {
     polkadot_additional_validator_flags = var.polkadot_additional_validator_flags
 
     # SOT
-    region          = data.aws_region.this.name
-    sync_bucket_uri = local.create_source_of_truth ? aws_s3_bucket.sync[0].bucket_domain_name : var.sync_bucket_uri
+    region           = data.aws_region.this.name
+    sync_bucket_name = local.create_source_of_truth ? aws_s3_bucket.sync[0].id : var.sync_bucket_name
 
     # Consul
     consul_datacenter           = data.aws_region.this.name
