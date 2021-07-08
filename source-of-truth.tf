@@ -42,3 +42,8 @@ output "sync_bucket_domain_name" {
 output "sync_bucket_name" {
   value = join("", aws_s3_bucket.sync.*.bucket)
 }
+
+output "kms_key_arn" {
+  value     = join("", aws_kms_key.key.arn)
+  sensitive = true
+}
