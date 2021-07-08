@@ -44,6 +44,5 @@ output "sync_bucket_name" {
 }
 
 output "kms_key_arn" {
-  value     = join("", aws_kms_key.key.*.arn)
-  sensitive = true
+  value = join("", aws_kms_key.key.*.arn)
 }
