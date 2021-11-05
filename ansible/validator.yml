@@ -8,7 +8,7 @@
       vars:
         enable_cloud_wait: true
         enable_jq: true
-        mount_volumes: {{ mount_volumes }}
+        mount_volumes: "{{ mount_volumes }}"
     - name: Run volumes playbook
       include_role:
         name: volumes
