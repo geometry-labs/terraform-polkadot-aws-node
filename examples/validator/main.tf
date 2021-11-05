@@ -33,6 +33,8 @@ module "default" {
   consul_enabled        = false
   hardening_enabled     = true
   mount_volumes         = false
+  polkadot_client_url   = "https://github.com/paritytech/polkadot/releases/download/v0.9.12/polkadot"
+  polkadot_client_hash  = "4a06a043e8fec42e09384a7ebab4331d138101ee55846af356e08d38982d767a"
 
   depends_on = [module.network]
 }
