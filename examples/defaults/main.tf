@@ -20,6 +20,7 @@ module "default" {
   public_key       = var.public_key
   private_key_path = var.private_key_path
   node_purpose     = "library"
+  mount_volumes    = false
 }
 
 output "public_ip" {

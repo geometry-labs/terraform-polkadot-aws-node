@@ -276,6 +276,7 @@ module "ansible" {
     ssh_user          = var.ssh_user
     deployed_networks = join("\n", [for network in local.network_settings : network["shortname"]])
     instance_type     = "node"
+    mount_volumes     = var.mount_volumes
 
     # enable flags
     node_exporter_enabled = var.node_exporter_enabled

@@ -32,6 +32,7 @@ module "default" {
   skip_health_check     = true
   consul_enabled        = false
   hardening_enabled     = true
+  mount_volumes         = false
 
   depends_on = [module.network]
 }

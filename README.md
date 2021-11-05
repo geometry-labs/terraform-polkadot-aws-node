@@ -241,6 +241,7 @@ No issue is creating limit on this module.
 | <a name="output_public_ip"></a> [public\_ip](#output\_public\_ip) | n/a |
 | <a name="output_security_group_id"></a> [security\_group\_id](#output\_security\_group\_id) | n/a |
 | <a name="output_subnet_id"></a> [subnet\_id](#output\_subnet\_id) | n/a |
+| <a name="output_sync_bucket_arn"></a> [sync\_bucket\_arn](#output\_sync\_bucket\_arn) | n/a |
 | <a name="output_sync_bucket_domain_name"></a> [sync\_bucket\_domain\_name](#output\_sync\_bucket\_domain\_name) | n/a |
 | <a name="output_sync_bucket_name"></a> [sync\_bucket\_name](#output\_sync\_bucket\_name) | n/a |
 | <a name="output_this_security_group_id"></a> [this\_security\_group\_id](#output\_this\_security\_group\_id) | n/a |

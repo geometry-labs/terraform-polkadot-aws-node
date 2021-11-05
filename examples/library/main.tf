@@ -33,6 +33,7 @@ module "default" {
   vpc_id           = module.vpc.vpc_id
   private_key_path = var.private_key_path
   node_purpose     = "library"
+  mount_volumes    = false
 
   depends_on = [module.vpc] # Needed due to vpc data sources
 }

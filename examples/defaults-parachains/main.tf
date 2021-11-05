@@ -21,7 +21,9 @@ locals {
       api_health          = "5000"
       polkadot_prometheus = "9610"
       json_rpc            = "9933"
+      json_envoy          = "19933"
       ws_rpc              = "9944"
+      ws_envoy            = "19944"
     }
     kusama = {
       name                = "kusama"
@@ -29,7 +31,9 @@ locals {
       api_health          = "5001"
       polkadot_prometheus = "9611"
       json_rpc            = "9934"
+      json_envoy          = "19934"
       ws_rpc              = "9945"
+      ws_envoy            = "19945"
     }
   }
 }
@@ -42,6 +46,7 @@ module "default" {
   private_key_path = var.private_key_path
   node_purpose     = "library"
   network_settings = local.network_settings
+  mount_volumes    = false
 }
 
 output "public_ip" {
