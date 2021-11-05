@@ -31,6 +31,7 @@ module "default" {
   private_key_path   = var.private_key_path
   node_purpose       = "truth"
   mount_volumes      = false
+  skip_health_check  = true
 
   depends_on = [module.network]
 }

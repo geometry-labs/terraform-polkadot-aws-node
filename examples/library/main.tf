@@ -27,13 +27,14 @@ module "vpc" {
 module "default" {
   source = "../.."
 
-  name             = "library-${random_pet.this.id}"
-  public_key       = var.public_key
-  subnet_id        = module.vpc.public_subnets[0]
-  vpc_id           = module.vpc.vpc_id
-  private_key_path = var.private_key_path
-  node_purpose     = "library"
-  mount_volumes    = false
+  name              = "library-${random_pet.this.id}"
+  public_key        = var.public_key
+  subnet_id         = module.vpc.public_subnets[0]
+  vpc_id            = module.vpc.vpc_id
+  private_key_path  = var.private_key_path
+  node_purpose      = "library"
+  mount_volumes     = false
+  skip_health_check = true
 
   depends_on = [module.vpc] # Needed due to vpc data sources
 }

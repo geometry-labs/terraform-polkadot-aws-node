@@ -41,12 +41,13 @@ locals {
 module "default" {
   source = "../.."
 
-  name             = "default-${random_pet.this.id}"
-  public_key       = var.public_key
-  private_key_path = var.private_key_path
-  node_purpose     = "library"
-  network_settings = local.network_settings
-  mount_volumes    = false
+  name              = "default-${random_pet.this.id}"
+  public_key        = var.public_key
+  private_key_path  = var.private_key_path
+  node_purpose      = "library"
+  network_settings  = local.network_settings
+  mount_volumes     = false
+  skip_health_check = true
 }
 
 output "public_ip" {
