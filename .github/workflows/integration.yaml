@@ -13,7 +13,7 @@ jobs:
           - TestSOT
           - TestValidator
           - TestDefault
-          - TestDefaultParachains
+          - TestParachains
 
     name: Run Terratest Integration Tests
     runs-on: ubuntu-latest
