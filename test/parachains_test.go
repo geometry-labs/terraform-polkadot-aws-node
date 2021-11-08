@@ -10,7 +10,7 @@ import (
 func TestParachains(t *testing.T) {
 	t.Parallel()
 
-	exampleFolder := test_structure.CopyTerraformFolderToTemp(t, "../", "examples/defaults-parachains")
+	exampleFolder := test_structure.CopyTerraformFolderToTemp(t, "../", "examples/parachains")
 
 	defer test_structure.RunTestStage(t, "teardown", func() {
 		terraformOptions := test_structure.LoadTerraformOptions(t, exampleFolder)
