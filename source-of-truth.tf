@@ -17,11 +17,14 @@ resource "aws_s3_bucket" "sync" {
   bucket_prefix = "${var.name}-truth"
   acl           = "private"
 
-  server_side_encryption_configuration {
-    rule {
-      apply_server_side_encryption_by_default {
-        kms_master_key_id = join("", aws_kms_key.key.*.id)
-        sse_algorithm     = "aws:kms"
+  dynamic "server_side_encryption_configuration" {
+    for_each = var.enable_kms ? [1] : []
+    content {
+      rule {
+        apply_server_side_encryption_by_default {
+          kms_master_key_id = join("", aws_kms_key.key.*.id)
+          sse_algorithm     = "aws:kms"
+        }
       }
     }
   }
