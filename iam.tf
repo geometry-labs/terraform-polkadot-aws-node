@@ -42,13 +42,16 @@ data "aws_iam_policy_document" "sot_host_policy_document" {
     resources = [join("", aws_s3_bucket.sync.*.arn)]
   }
 
-  statement {
-    actions = [
-      "kms:Encrypt",
-      "kms:Decrypt",
-      "kms:GenerateDataKey"
-    ]
-    resources = [join("", aws_kms_key.key.*.arn)]
+  dynamic "statement" {
+    for_each = var.enable_kms ? [1] : []
+    content {
+      actions = [
+        "kms:Encrypt",
+        "kms:Decrypt",
+        "kms:GenerateDataKey"
+      ]
+      resources = [join("", aws_kms_key.key.*.arn)]
+    }
   }
 }
 
