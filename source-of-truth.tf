@@ -3,6 +3,11 @@
 //scale and sync for autoscaling groups.  This creates an s3 bucket and
 //gives the node permission to push data to it.
 
+variable "enable_kms" {
+  type    = bool
+  default = false
+}
+
 locals {
   create_source_of_truth = var.node_purpose == "truth" && var.sync_bucket_name == null
 }
@@ -25,12 +30,12 @@ resource "aws_s3_bucket" "sync" {
 }
 
 resource "aws_kms_key" "key" {
-  count = local.create_source_of_truth ? 1 : 0
+  count = var.enable_kms && local.create_source_of_truth ? 1 : 0
   tags  = merge(var.tags, { Name = var.name })
 }
 
 resource "aws_kms_alias" "alias" {
-  count         = local.create_source_of_truth ? 1 : 0
+  count         = var.enable_kms && local.create_source_of_truth ? 1 : 0
   name          = "alias/${join("", aws_s3_bucket.sync.*.bucket)}"
   target_key_id = join("", aws_kms_key.key.*.arn)
 }
