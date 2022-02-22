@@ -1,4 +1,3 @@
-
 //Source of truth nodes are run to back up the chain to S3 to allow fast
 //scale and sync for autoscaling groups.  This creates an s3 bucket and
 //gives the node permission to push data to it.
@@ -15,21 +14,29 @@ locals {
 resource "aws_s3_bucket" "sync" {
   count         = local.create_source_of_truth ? 1 : 0
   bucket_prefix = "${var.name}-truth"
-  acl           = "private"
 
-  dynamic "server_side_encryption_configuration" {
+  tags = merge(var.tags)
+}
+
+resource "aws_s3_bucket_acl" "this" {
+  count  = local.create_source_of_truth ? 1 : 0
+  bucket = join("", aws_s3_bucket.sync.*.bucket)
+  acl    = "private"
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "this" {
+  count  = local.create_source_of_truth ? 1 : 0
+  bucket = join("", aws_s3_bucket.sync.*.bucket)
+
+  dynamic "rule" {
     for_each = var.enable_kms ? [1] : []
     content {
-      rule {
-        apply_server_side_encryption_by_default {
-          kms_master_key_id = join("", aws_kms_key.key.*.id)
-          sse_algorithm     = "aws:kms"
-        }
+      apply_server_side_encryption_by_default {
+        kms_master_key_id = join("", aws_kms_key.key.*.id)
+        sse_algorithm     = "aws:kms"
       }
     }
   }
-
-  tags = merge(var.tags)
 }
 
 resource "aws_kms_key" "key" {
