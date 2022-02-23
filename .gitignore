@@ -2,6 +2,8 @@
 
 .terraform.lock.hcl
 
+deployments/*
+
 # Terraform and terragrunt
 *.tfstate*
 *.tfstate.backup

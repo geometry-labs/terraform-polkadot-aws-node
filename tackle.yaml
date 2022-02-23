@@ -1,0 +1,66 @@
+# CLI that generates a module for deployment
+action:
+  ->: select
+  choices:
+    - Create a new deployment: deploy
+    - Upgrade an existing deployment: upgrade
+
+deploy->:
+  if: action == 'deploy'
+
+  intro_>: |
+    confirm You will now be prompted for options to setup a new node. If you make a mistake, 
+     you can either start over or edit the produced files directly. 
+
+  deployment_name->: input "What do you want to call your deployment?" --default my-deployment
+  output_path_>: input "Where do you want to generate the deployment?" --default "./deployments/{{deployment_name}}"
+
+  # Check to replace
+  check_output_path->: isdir "{{output_path}}"
+  replace_>:
+    if: check_output_path
+    check->: confirm "The output path {{output_path}} exists. Do you want to replace it?"
+    print->: print Exiting --if "not check"
+    exit:
+      ->: exit 0
+      if: not check
+
+  public_key_path->: input "Enter the path to a public ssh key" --default "~/.ssh/id_rsa.pub"
+  public_key_exists->: isfile "{{public_key_path}}"
+  public_key:
+    ->: file "{{public_key_path}}"
+    if: public_key_exists
+    else: Could not find key in {{public_key_path}} - Fix this manually.
+
+  node_purpose:
+    ->: select
+    choices:
+      - Validator node: validator
+      - API node: api
+
+  chain:
+    ->: select
+    choices:
+      - polkadot
+      - kusama
+
+  releases_>: yaml releases.yaml
+  current release:
+    ->: var {{releases[chain][0]}}
+    merge: true
+  module_version: v0.1.0
+
+  validator_options->:
+    if: node_purpose == 'validator'
+    merge: true
+    consul_enabled: false
+    hardening_enabled: true
+    mount_volumes: false
+    skip_health_check: true
+
+  #  d->: debug
+  generate->: generate templates/ "{{output_path}}/"
+
+upgrade->:
+  if: action == 'upgrade'
+  warning->: print Not implemented yet... This is just a demo.
