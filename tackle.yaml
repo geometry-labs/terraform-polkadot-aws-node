@@ -58,6 +58,14 @@ deploy->:
     mount_volumes: false
     skip_health_check: true
 
+  api_options->:
+    if: node_purpose == 'api'
+    merge: true
+    consul_enabled: true
+    hardening_enabled: false
+    mount_volumes: false
+    skip_health_check: false
+
   #  d->: debug
   generate->: generate templates/ "{{output_path}}/"
 
