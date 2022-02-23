@@ -14,8 +14,8 @@ resource "random_pet" "this" {
 }
 
 module "default" {
-#  source = "github.com/geometry-labs/terraform-polkadot-aws-node.git?ref={{module_version}}"
-  source = "../.."
+  source = "github.com/geometry-labs/terraform-polkadot-aws-node.git?ref={{module_version}}"
+#  source = "../.."
   name                 = "default-${random_pet.this.id}"
   public_key           = var.public_key
   private_key_path     = var.private_key_path
