@@ -25,16 +25,13 @@ resource "aws_s3_bucket_acl" "this" {
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "this" {
-  count  = local.create_source_of_truth ? 1 : 0
+  count  = local.create_source_of_truth && var.enable_kms ? 1 : 0
   bucket = join("", aws_s3_bucket.sync.*.bucket)
 
-  dynamic "rule" {
-    for_each = var.enable_kms ? [1] : []
-    content {
-      apply_server_side_encryption_by_default {
-        kms_master_key_id = join("", aws_kms_key.key.*.id)
-        sse_algorithm     = "aws:kms"
-      }
+  rule {
+    apply_server_side_encryption_by_default {
+      kms_master_key_id = join("", aws_kms_key.key.*.id)
+      sse_algorithm     = "aws:kms"
     }
   }
 }
